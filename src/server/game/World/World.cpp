@@ -147,7 +147,7 @@ World::~World()
         m_offlineSessions.erase(m_offlineSessions.begin());
     }
 
-    CliCommandHolder* command = NULL;
+    CliCommandHolder* command = nullptr;
     while (cliCmdQueue.next(command))
         delete command;
 
@@ -161,20 +161,20 @@ World::~World()
 Player* World::FindPlayerInZone(uint32 zone)
 {
     ///- circle through active sessions and return the first player found in the zone
-    SessionMap::const_iterator itr;
-    for (itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
+    Player* player(nullptr);
+    for (auto cur : m_sessions)
     {
-        if (!itr->second)
+        if (cur.second == nullptr)
             continue;
 
-        Player* player = itr->second->GetPlayer();
-        if (!player)
+        player = cur.second->GetPlayer();
+        if (player == nullptr)
             continue;
 
         if (player->IsInWorld() && player->GetZoneId() == zone)
             return player;
     }
-    return NULL;
+    return nullptr;
 }
 
 bool World::IsClosed() const
@@ -194,11 +194,10 @@ void World::SetClosed(bool val)
 WorldSession* World::FindSession(uint32 id) const
 {
     SessionMap::const_iterator itr = m_sessions.find(id);
-
     if (itr != m_sessions.end())
         return itr->second;                                 // also can return NULL for kicked session
-    else
-        return NULL;
+
+    return nullptr;
 }
 
 WorldSession* World::FindOfflineSession(uint32 id) const
@@ -206,18 +205,18 @@ WorldSession* World::FindOfflineSession(uint32 id) const
     SessionMap::const_iterator itr = m_offlineSessions.find(id);
     if (itr != m_offlineSessions.end())
         return itr->second;
-    else
-        return NULL;
+
+    return nullptr;
 }
 
 WorldSession* World::FindOfflineSessionForCharacterGUID(uint32 guidLow) const
 {
     if (m_offlineSessions.empty())
-        return NULL;
-    for (SessionMap::const_iterator itr = m_offlineSessions.begin(); itr != m_offlineSessions.end(); ++itr)
-        if (itr->second->GetGuidLow() == guidLow)
-            return itr->second;
-    return NULL;
+        return nullptr;
+    for (auto cur : m_offlineSessions)
+        if (cur.second->GetGuidLow() == guidLow)
+            return cur.second;
+    return nullptr;
 }
 
 /// Remove a given session
@@ -225,9 +224,10 @@ bool World::KickSession(uint32 id)
 {
     ///- Find the session, kick the user, but we can't delete session at this moment to prevent iterator invalidation
     SessionMap::const_iterator itr = m_sessions.find(id);
-
-    if (itr != m_sessions.end() && itr->second)
+    if (itr != m_sessions.end())
     {
+        if (itr->second == nullptr)
+            return false;
         if (itr->second->PlayerLoading())
             return false;
 
@@ -267,8 +267,8 @@ void World::AddSession_(WorldSession* s)
         if (oldSession->HandleSocketClosed())
         {
             // there should be no offline session if current one is logged onto a character
-            SessionMap::iterator iter;
-            if ((iter = m_offlineSessions.find(oldSession->GetAccountId())) != m_offlineSessions.end())
+            SessionMap::iterator iter = m_offlineSessions.find(oldSession->GetAccountId());
+            if (iter != m_offlineSessions.end())
             {
                 WorldSession* tmp = iter->second;
                 m_offlineSessions.erase(iter);
@@ -310,7 +310,7 @@ void World::AddSession_(WorldSession* s)
 
 bool World::HasRecentlyDisconnected(WorldSession* session)
 {
-    if (!session)
+    if (session == nullptr)
         return false;
 
     if (uint32 tolerance = getIntConfig(CONFIG_INTERVAL_DISCONNECT_TOLERANCE))
@@ -422,6 +422,7 @@ void World::LoadModuleConfigSettings()
         std::string cfg_def_file = cfg_file + ".dist";
 
         // Load .conf.dist config
+        /*  why??
         if (!sConfigMgr->LoadMore(cfg_def_file.c_str()))
         {
             sLog->outString();
@@ -429,7 +430,7 @@ void World::LoadModuleConfigSettings()
             sLog->outError("Module config: Verify that the file exists and has \'[worldserver]' written in the top of the file!");
             sLog->outError("Module config: Use default settings!");
             sLog->outString();
-        }
+        } */
 
         // Load .conf config
         if (!sConfigMgr->LoadMore(cfg_file.c_str()))
@@ -722,7 +723,7 @@ void World::LoadConfigSettings(bool reload)
     m_int_configs[CONFIG_STRICT_CHARTER_NAMES]                = sConfigMgr->GetIntDefault ("StrictCharterNames", 0);
     m_int_configs[CONFIG_STRICT_CHANNEL_NAMES]                = sConfigMgr->GetIntDefault ("StrictChannelNames", 0);
     m_int_configs[CONFIG_STRICT_PET_NAMES]                    = sConfigMgr->GetIntDefault ("StrictPetNames",     0);
-    
+
     m_bool_configs[CONFIG_ALLOW_TWO_SIDE_ACCOUNTS]            = sConfigMgr->GetBoolDefault("AllowTwoSide.Accounts", true);
     m_bool_configs[CONFIG_ALLOW_TWO_SIDE_INTERACTION_CALENDAR]= sConfigMgr->GetBoolDefault("AllowTwoSide.Interaction.Calendar", false);
     m_bool_configs[CONFIG_ALLOW_TWO_SIDE_INTERACTION_CHAT]    = sConfigMgr->GetBoolDefault("AllowTwoSide.Interaction.Chat", false);
@@ -734,7 +735,7 @@ void World::LoadConfigSettings(bool reload)
     m_bool_configs[CONFIG_ALLOW_TWO_SIDE_WHO_LIST]            = sConfigMgr->GetBoolDefault("AllowTwoSide.WhoList", false);
     m_bool_configs[CONFIG_ALLOW_TWO_SIDE_ADD_FRIEND]          = sConfigMgr->GetBoolDefault("AllowTwoSide.AddFriend", false);
     m_bool_configs[CONFIG_ALLOW_TWO_SIDE_TRADE]               = sConfigMgr->GetBoolDefault("AllowTwoSide.trade", false);
-   
+
     m_int_configs[CONFIG_MIN_PLAYER_NAME]                     = sConfigMgr->GetIntDefault ("MinPlayerName",  2);
     if (m_int_configs[CONFIG_MIN_PLAYER_NAME] < 1 || m_int_configs[CONFIG_MIN_PLAYER_NAME] > MAX_PLAYER_NAME)
     {
@@ -1040,7 +1041,7 @@ void World::LoadConfigSettings(bool reload)
     m_int_configs[CONFIG_WORLD_BOSS_LEVEL_DIFF] = sConfigMgr->GetIntDefault("WorldBossLevelDiff", 3);
 
     m_bool_configs[CONFIG_QUEST_ENABLE_QUEST_TRACKER] = sConfigMgr->GetBoolDefault("Quests.EnableQuestTracker", false);
-    
+
     // note: disable value (-1) will assigned as 0xFFFFFFF, to prevent overflow at calculations limit it to max possible player level MAX_LEVEL(100)
     m_int_configs[CONFIG_QUEST_LOW_LEVEL_HIDE_DIFF] = sConfigMgr->GetIntDefault("Quests.LowLevelHideDiff", 4);
     if (m_int_configs[CONFIG_QUEST_LOW_LEVEL_HIDE_DIFF] > MAX_LEVEL)
@@ -1337,7 +1338,7 @@ void World::SetInitialWorldSettings()
 
     ///- Initialize detour memory management
     dtAllocSetCustom(dtCustomAlloc, dtCustomFree);
-    
+
     sLog->outString("Initializing Scripts...");
     sScriptMgr->Initialize();
 
@@ -1802,8 +1803,8 @@ void World::SetInitialWorldSettings()
     ///- Handle outdated emails (delete/return)
     sLog->outString("Returning old mails...");
     sObjectMgr->ReturnOrDeleteOldMails(false);
-    
-    ///- Load AutoBroadCast 
+
+    ///- Load AutoBroadCast
     sLog->outString("Loading Autobroadcasts...");
     LoadAutobroadcasts();
 
@@ -1811,7 +1812,7 @@ void World::SetInitialWorldSettings()
     sObjectMgr->LoadSpellScripts();                              // must be after load Creature/Gameobject(Template/Data)
     sObjectMgr->LoadEventScripts();                              // must be after load Creature/Gameobject(Template/Data)
     sObjectMgr->LoadWaypointScripts();
-    
+
     sLog->outString("Loading spell script names...");
     sObjectMgr->LoadSpellScriptNames();
 
@@ -1952,7 +1953,7 @@ void World::SetInitialWorldSettings()
     sEluna->RunScripts();
     sEluna->OnConfigLoad(false,false); // Must be done after Eluna is initialized and scripts have run.
 #endif
-    
+
     uint32 startupDuration = GetMSTimeDiffToNow(startupBegin);
     sLog->outString();
     sLog->outError("WORLD: World initialized in %u minutes %u seconds", (startupDuration / 60000), ((startupDuration % 60000) / 1000));
@@ -2001,7 +2002,7 @@ void World::DetectDBCLang()
     {
         default_locale = m_lang_confid;
     }
-        
+
     if (default_locale >= TOTAL_LOCALES)
     {
         sLog->outError("Unable to determine your DBC Locale! (corrupt DBC?)");
@@ -2113,7 +2114,7 @@ void World::Update(uint32 diff)
     // so we don't have to do it in every packet that modifies auctions
     AsyncAuctionListingMgr::SetAuctionListingAllowed(false);
     {
-        TRINITY_GUARD(ACE_Thread_Mutex, AsyncAuctionListingMgr::GetLock()); 
+        TRINITY_GUARD(ACE_Thread_Mutex, AsyncAuctionListingMgr::GetLock());
 
         // pussywizard: handle auctions when the timer has passed
         if (m_timers[WUPDATE_AUCTIONS].Passed())
@@ -2133,7 +2134,7 @@ void World::Update(uint32 diff)
         }
 
         UpdateSessions(diff);
-    } 
+    }
     // end of section with mutex
     AsyncAuctionListingMgr::SetAuctionListingAllowed(true);
 
@@ -2183,25 +2184,25 @@ void World::Update(uint32 diff)
 
     // execute callbacks from sql queries that were queued recently
     ProcessQueryCallbacks();
-    
+
     /// <li> Update uptime table
     if (m_timers[WUPDATE_UPTIME].Passed())
     {
         uint32 tmpDiff = uint32(m_gameTime - m_startTime);
         uint32 maxOnlinePlayers = GetMaxPlayerCount();
-        
+
         m_timers[WUPDATE_UPTIME].Reset();
-        
+
         PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPD_UPTIME_PLAYERS);
-        
+
         stmt->setUInt32(0, tmpDiff);
         stmt->setUInt16(1, uint16(maxOnlinePlayers));
         stmt->setUInt32(2, realmID);
         stmt->setUInt32(3, uint32(m_startTime));
-        
+
         LoginDatabase.Execute(stmt);
     }
-    
+
     ///- Erase corpses once every 20 minutes
     if (m_timers[WUPDATE_CORPSES].Passed())
     {
@@ -2290,7 +2291,7 @@ namespace Trinity
     {
         public:
             typedef std::vector<WorldPacket*> WorldPacketList;
-            explicit WorldWorldTextBuilder(uint32 textId, va_list* args = NULL) : i_textId(textId), i_args(args) {}
+            explicit WorldWorldTextBuilder(uint32 textId, va_list* args = nullptr) : i_textId(textId), i_args(args) {}
             void operator()(WorldPacketList& data_list, LocaleConstant loc_idx)
             {
                 char const* text = sObjectMgr->GetTrinityString(i_textId, loc_idx);
@@ -2311,14 +2312,14 @@ namespace Trinity
                     do_helper(data_list, (char*)text);
             }
         private:
-            char* lineFromMessage(char*& pos) { char* start = strtok(pos, "\n"); pos = NULL; return start; }
+            char* lineFromMessage(char*& pos) { char* start = strtok(pos, "\n"); pos = nullptr; return start; }
             void do_helper(WorldPacketList& data_list, char* text)
             {
                 char* pos = text;
                 while (char* line = lineFromMessage(pos))
                 {
                     WorldPacket* data = new WorldPacket();
-                    ChatHandler::BuildChatPacket(*data, CHAT_MSG_SYSTEM, LANG_UNIVERSAL, NULL, NULL, line);
+                    ChatHandler::BuildChatPacket(*data, CHAT_MSG_SYSTEM, LANG_UNIVERSAL, 0, 0, line);
                     data_list.push_back(data);
                 }
             }
@@ -2339,7 +2340,7 @@ void World::SendWorldText(uint32 string_id, ...)
     Trinity::LocalizedPacketListDo<Trinity::WorldWorldTextBuilder> wt_do(wt_builder);
     for (SessionMap::const_iterator itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
     {
-        if (!itr->second || !itr->second->GetPlayer() || !itr->second->GetPlayer()->IsInWorld())
+        if ((itr->second == nullptr) || !itr->second->GetPlayer() || !itr->second->GetPlayer()->IsInWorld())
             continue;
 
         wt_do(itr->second->GetPlayer());
@@ -2358,7 +2359,7 @@ void World::SendGMText(uint32 string_id, ...)
     Trinity::LocalizedPacketListDo<Trinity::WorldWorldTextBuilder> wt_do(wt_builder);
     for (SessionMap::iterator itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
     {
-        if (!itr->second || !itr->second->GetPlayer() || !itr->second->GetPlayer()->IsInWorld())
+        if ((itr->second == nullptr) || !itr->second->GetPlayer() || !itr->second->GetPlayer()->IsInWorld())
             continue;
 
         if (AccountMgr::IsPlayerAccount(itr->second->GetSecurity()))
@@ -2381,7 +2382,7 @@ void World::SendGlobalText(const char* text, WorldSession* self)
 
     while (char* line = ChatHandler::LineFromMessage(pos))
     {
-        ChatHandler::BuildChatPacket(data, CHAT_MSG_SYSTEM, LANG_UNIVERSAL, NULL, NULL, line);
+        ChatHandler::BuildChatPacket(data, CHAT_MSG_SYSTEM, LANG_UNIVERSAL, 0, 0, line);
         SendGlobalMessage(&data, self);
     }
 
@@ -2392,18 +2393,16 @@ void World::SendGlobalText(const char* text, WorldSession* self)
 bool World::SendZoneMessage(uint32 zone, WorldPacket* packet, WorldSession* self, TeamId teamId)
 {
     bool foundPlayerToSend = false;
-    SessionMap::const_iterator itr;
-
-    for (itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
+    for (auto cur : m_sessions)
     {
-        if (itr->second &&
-            itr->second->GetPlayer() &&
-            itr->second->GetPlayer()->IsInWorld() &&
-            itr->second->GetPlayer()->GetZoneId() == zone &&
-            itr->second != self &&
-            (teamId == TEAM_NEUTRAL || itr->second->GetPlayer()->GetTeamId() == teamId))
+        if ((cur.second != nullptr) &&
+            cur.second->GetPlayer() &&
+            cur.second->GetPlayer()->IsInWorld() &&
+            (cur.second->GetPlayer()->GetZoneId() == zone) &&
+            cur.second != self &&
+            (teamId == TEAM_NEUTRAL || cur.second->GetPlayer()->GetTeamId() == teamId))
         {
-            itr->second->SendPacket(packet);
+            cur.second->SendPacket(packet);
             foundPlayerToSend = true;
         }
     }
@@ -2415,7 +2414,7 @@ bool World::SendZoneMessage(uint32 zone, WorldPacket* packet, WorldSession* self
 void World::SendZoneText(uint32 zone, const char* text, WorldSession* self, TeamId teamId)
 {
     WorldPacket data;
-    ChatHandler::BuildChatPacket(data, CHAT_MSG_SYSTEM, LANG_UNIVERSAL, NULL, NULL, text);
+    ChatHandler::BuildChatPacket(data, CHAT_MSG_SYSTEM, LANG_UNIVERSAL, 0, 0, text);
     SendZoneMessage(zone, &data, self, teamId);
 }
 
@@ -2425,21 +2424,21 @@ void World::KickAll()
     m_QueuedPlayer.clear();                                 // prevent send queue update packet and login queued sessions
 
     // session not removed at kick and will removed in next update tick
-    for (SessionMap::const_iterator itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
-        itr->second->KickPlayer("KickAll sessions");
+    for (auto cur : m_sessions)
+        cur.second->KickPlayer("KickAll sessions");
 
     // pussywizard: kick offline sessions
-    for (SessionMap::const_iterator itr = m_offlineSessions.begin(); itr != m_offlineSessions.end(); ++itr)
-        itr->second->KickPlayer("KickAll offline sessions");
+    for (auto cur : m_offlineSessions)
+        cur.second->KickPlayer("KickAll offline sessions");
 }
 
 /// Kick (and save) all players with security level less `sec`
 void World::KickAllLess(AccountTypes sec)
 {
     // session not removed at kick and will removed in next update tick
-    for (SessionMap::const_iterator itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
-        if (itr->second->GetSecurity() < sec)
-            itr->second->KickPlayer("KickAllLess");
+    for (auto cur : m_sessions)
+        if (cur.second->GetSecurity() < sec)
+            cur.second->KickPlayer("KickAllLess");
 }
 
 /// Update the game time
@@ -2564,7 +2563,7 @@ void World::SendServerMessage(ServerMessageType type, const char *text, Player* 
 void World::UpdateSessions(uint32 diff)
 {
     ///- Add new sessions
-    WorldSession* sess = NULL;
+    WorldSession* sess = nullptr;
     while (addSessQueue.next(sess))
         AddSession_ (sess);
 
@@ -2631,13 +2630,13 @@ void World::UpdateSessions(uint32 diff)
 // This handles the issued and queued CLI commands
 void World::ProcessCliCommands()
 {
-    CliCommandHolder::Print* zprint = NULL;
-    void* callbackArg = NULL;
-    CliCommandHolder* command = NULL;
+    CliCommandHolder::Print* zprint = nullptr;
+    void* callbackArg = nullptr;
+    CliCommandHolder* command = nullptr;
     while (cliCmdQueue.next(command))
     {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-        sLog->outDetail("CLI command under processing...");
+        sLog->outDetail("CLI command processing...");
 #endif
         zprint = command->m_print;
         callbackArg = command->m_callbackArg;
@@ -2653,7 +2652,7 @@ void World::SendAutoBroadcast()
 {
     if (m_Autobroadcasts.empty())
         return;
-    
+
     uint32 weight = 0;
     AutobroadcastsWeightMap selectionWeights;
 
@@ -3250,7 +3249,7 @@ GlobalPlayerData const* World::GetGlobalPlayerData(uint32 guid) const
     }
 
     // Player not found
-    return NULL;
+    return nullptr;
 }
 
 uint32 World::GetGlobalPlayerGUID(std::string const& name) const
