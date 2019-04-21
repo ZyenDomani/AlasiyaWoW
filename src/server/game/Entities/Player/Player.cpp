@@ -7318,12 +7318,12 @@ bool Player::RewardHonor(Unit* uVictim, uint32 groupsize, int32 honor, bool awar
             uint32 vtitle = victim->GetUInt32Value(PLAYER__FIELD_KNOWN_TITLES);
             uint32 ktitle = GetUInt32Value(PLAYER__FIELD_KNOWN_TITLES);
             uint32 killer_title = 0;
-            if (Player::Title::MASK_ALL_PVP & ktitle)
+            if (MASK_ALL_PVP & ktitle)
                 for (int i = ((GetTeamId() == ALLIANCE) ? 1:HKRANKMAX);i!=((GetTeamId() == ALLIANCE) ? HKRANKMAX : (2*HKRANKMAX-1));++i)
                     if (ktitle & (1<<i))
                         killer_title = i;
 
-            if (Player::Title::MASK_ALL_PVP & vtitle)
+            if (MASK_ALL_PVP & vtitle)
                 for (int i = ((victim->GetTeamId() == ALLIANCE) ? 1:HKRANKMAX);i!=((victim->GetTeamId() == ALLIANCE) ? HKRANKMAX : (2*HKRANKMAX-1));++i)
                     if (vtitle & (1<<i))
                         victim_title = i;

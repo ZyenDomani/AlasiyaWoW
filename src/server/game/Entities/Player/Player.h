@@ -413,63 +413,59 @@ enum PlayerFlags
 
 // used for PLAYER__FIELD_KNOWN_TITLES field (uint64), (1<<bit_index) without (-1)
 // can't use enum for uint64 values...yes you can.  just gotta know how.  ;)
-namespace Player {
-    namespace Title {
-        enum:uint64_t {
-            DISABLED              = 0x0000000000000000,
-            NONE                  = 0x0000000000000001,
-            // alliance
-            PRIVATE               = 0x0000000000000002, // 1
-            CORPORAL              = 0x0000000000000004, // 2
-            SERGEANT_A            = 0x0000000000000008, // 3
-            MASTER_SERGEANT       = 0x0000000000000010, // 4
-            SERGEANT_MAJOR        = 0x0000000000000020, // 5
-            KNIGHT                = 0x0000000000000040, // 6
-            KNIGHT_LIEUTENANT     = 0x0000000000000080, // 7
-            KNIGHT_CAPTAIN        = 0x0000000000000100, // 8
-            KNIGHT_CHAMPION       = 0x0000000000000200, // 9
-            LIEUTENANT_COMMANDER  = 0x0000000000000400, // 10
-            COMMANDER             = 0x0000000000000800, // 11
-            MARSHAL               = 0x0000000000001000, // 12
-            FIELD_MARSHAL         = 0x0000000000002000, // 13
-            GRAND_MARSHAL         = 0x0000000000004000, // 14
-            // horde
-            SCOUT                 = 0x0000000000008000, // 15
-            GRUNT                 = 0x0000000000010000, // 16
-            SERGEANT_H            = 0x0000000000020000, // 17
-            SENIOR_SERGEANT       = 0x0000000000040000, // 18
-            FIRST_SERGEANT        = 0x0000000000080000, // 19
-            STONE_GUARD           = 0x0000000000100000, // 20
-            BLOOD_GUARD           = 0x0000000000200000, // 21
-            LEGIONNAIRE           = 0x0000000000400000, // 22
-            CENTURION             = 0x0000000000800000, // 23
-            CHAMPION              = 0x0000000001000000, // 24
-            LIEUTENANT_GENERAL    = 0x0000000002000000, // 25
-            GENERAL               = 0x0000000004000000, // 26
-            WARLORD               = 0x0000000008000000, // 27
-            HIGH_WARLORD          = 0x0000000010000000, // 28
-            // other
-            GLADIATOR             = 0x0000000020000000, // 29
-            DUELIST               = 0x0000000040000000, // 30
-            RIVAL                 = 0x0000000080000000, // 31
-            CHALLENGER            = 0x0000000100000000, // 32
-            SCARAB_LORD           = 0x0000000200000000, // 33
-            CONQUEROR             = 0x0000000400000000, // 34
-            JUSTICAR              = 0x0000000800000000, // 35
-            CHAMPION_OF_THE_NAARU = 0x0000001000000000, // 36
-            MERCILESS_GLADIATOR   = 0x0000002000000000, // 37
-            OF_THE_SHATTERED_SUN  = 0x0000004000000000, // 38
-            HAND_OF_ADAL          = 0x0000008000000000, // 39
-            VENGEFUL_GLADIATOR    = 0x0000010000000000, // 40
-            // combos/masks
-            MASK_ALLIANCE_PVP     = (PRIVATE | CORPORAL | SERGEANT_A | MASTER_SERGEANT | SERGEANT_MAJOR | KNIGHT | KNIGHT_LIEUTENANT | KNIGHT_CAPTAIN | \
-                                    KNIGHT_CHAMPION | LIEUTENANT_COMMANDER | COMMANDER | MARSHAL | FIELD_MARSHAL | GRAND_MARSHAL),
-            MASK_HORDE_PVP        = (SCOUT | GRUNT | SERGEANT_H | SENIOR_SERGEANT | FIRST_SERGEANT | STONE_GUARD | BLOOD_GUARD | LEGIONNAIRE |\
-                                    CENTURION | CHAMPION | LIEUTENANT_GENERAL | GENERAL | WARLORD | HIGH_WARLORD),
-            MASK_ALL_PVP          = (MASK_ALLIANCE_PVP | MASK_HORDE_PVP)
-        };
-    }
-}
+enum:uint64_t  {
+    DISABLED              = 0x0000000000000000,
+    NONE                  = 0x0000000000000001,
+    // alliance
+    PRIVATE               = 0x0000000000000002, // 1
+    CORPORAL              = 0x0000000000000004, // 2
+    SERGEANT_A            = 0x0000000000000008, // 3
+    MASTER_SERGEANT       = 0x0000000000000010, // 4
+    SERGEANT_MAJOR        = 0x0000000000000020, // 5
+    KNIGHT                = 0x0000000000000040, // 6
+    KNIGHT_LIEUTENANT     = 0x0000000000000080, // 7
+    KNIGHT_CAPTAIN        = 0x0000000000000100, // 8
+    KNIGHT_CHAMPION       = 0x0000000000000200, // 9
+    LIEUTENANT_COMMANDER  = 0x0000000000000400, // 10
+    COMMANDER             = 0x0000000000000800, // 11
+    MARSHAL               = 0x0000000000001000, // 12
+    FIELD_MARSHAL         = 0x0000000000002000, // 13
+    GRAND_MARSHAL         = 0x0000000000004000, // 14
+    // horde
+    SCOUT                 = 0x0000000000008000, // 15
+    GRUNT                 = 0x0000000000010000, // 16
+    SERGEANT_H            = 0x0000000000020000, // 17
+    SENIOR_SERGEANT       = 0x0000000000040000, // 18
+    FIRST_SERGEANT        = 0x0000000000080000, // 19
+    STONE_GUARD           = 0x0000000000100000, // 20
+    BLOOD_GUARD           = 0x0000000000200000, // 21
+    LEGIONNAIRE           = 0x0000000000400000, // 22
+    CENTURION             = 0x0000000000800000, // 23
+    CHAMPION              = 0x0000000001000000, // 24
+    LIEUTENANT_GENERAL    = 0x0000000002000000, // 25
+    GENERAL               = 0x0000000004000000, // 26
+    WARLORD               = 0x0000000008000000, // 27
+    HIGH_WARLORD          = 0x0000000010000000, // 28
+    // other
+    GLADIATOR             = 0x0000000020000000, // 29
+    DUELIST               = 0x0000000040000000, // 30
+    RIVAL                 = 0x0000000080000000, // 31
+    CHALLENGER            = 0x0000000100000000, // 32
+    SCARAB_LORD           = 0x0000000200000000, // 33
+    CONQUEROR             = 0x0000000400000000, // 34
+    JUSTICAR              = 0x0000000800000000, // 35
+    CHAMPION_OF_THE_NAARU = 0x0000001000000000, // 36
+    MERCILESS_GLADIATOR   = 0x0000002000000000, // 37
+    OF_THE_SHATTERED_SUN  = 0x0000004000000000, // 38
+    HAND_OF_ADAL          = 0x0000008000000000, // 39
+    VENGEFUL_GLADIATOR    = 0x0000010000000000, // 40
+    // combos/masks
+    MASK_ALLIANCE_PVP     = (PRIVATE | CORPORAL | SERGEANT_A | MASTER_SERGEANT | SERGEANT_MAJOR | KNIGHT | KNIGHT_LIEUTENANT | KNIGHT_CAPTAIN | \
+                            KNIGHT_CHAMPION | LIEUTENANT_COMMANDER | COMMANDER | MARSHAL | FIELD_MARSHAL | GRAND_MARSHAL),
+    MASK_HORDE_PVP        = (SCOUT | GRUNT | SERGEANT_H | SENIOR_SERGEANT | FIRST_SERGEANT | STONE_GUARD | BLOOD_GUARD | LEGIONNAIRE |\
+                            CENTURION | CHAMPION | LIEUTENANT_GENERAL | GENERAL | WARLORD | HIGH_WARLORD),
+    MASK_ALL_PVP          = (MASK_ALLIANCE_PVP | MASK_HORDE_PVP)
+} PlayerTitle;
 
 enum HonorKillPvPRank
 {
