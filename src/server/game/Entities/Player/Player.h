@@ -412,49 +412,103 @@ enum PlayerFlags
 };
 
 // used for PLAYER__FIELD_KNOWN_TITLES field (uint64), (1<<bit_index) without (-1)
-// can't use enum for uint64 values
-#define PLAYER_TITLE_DISABLED              UI64LIT(0x0000000000000000)
-#define PLAYER_TITLE_NONE                  UI64LIT(0x0000000000000001)
-#define PLAYER_TITLE_PRIVATE               UI64LIT(0x0000000000000002) // 1
-#define PLAYER_TITLE_CORPORAL              UI64LIT(0x0000000000000004) // 2
-#define PLAYER_TITLE_SERGEANT_A            UI64LIT(0x0000000000000008) // 3
-#define PLAYER_TITLE_MASTER_SERGEANT       UI64LIT(0x0000000000000010) // 4
-#define PLAYER_TITLE_SERGEANT_MAJOR        UI64LIT(0x0000000000000020) // 5
-#define PLAYER_TITLE_KNIGHT                UI64LIT(0x0000000000000040) // 6
-#define PLAYER_TITLE_KNIGHT_LIEUTENANT     UI64LIT(0x0000000000000080) // 7
-#define PLAYER_TITLE_KNIGHT_CAPTAIN        UI64LIT(0x0000000000000100) // 8
-#define PLAYER_TITLE_KNIGHT_CHAMPION       UI64LIT(0x0000000000000200) // 9
-#define PLAYER_TITLE_LIEUTENANT_COMMANDER  UI64LIT(0x0000000000000400) // 10
-#define PLAYER_TITLE_COMMANDER             UI64LIT(0x0000000000000800) // 11
-#define PLAYER_TITLE_MARSHAL               UI64LIT(0x0000000000001000) // 12
-#define PLAYER_TITLE_FIELD_MARSHAL         UI64LIT(0x0000000000002000) // 13
-#define PLAYER_TITLE_GRAND_MARSHAL         UI64LIT(0x0000000000004000) // 14
-#define PLAYER_TITLE_SCOUT                 UI64LIT(0x0000000000008000) // 15
-#define PLAYER_TITLE_GRUNT                 UI64LIT(0x0000000000010000) // 16
-#define PLAYER_TITLE_SERGEANT_H            UI64LIT(0x0000000000020000) // 17
-#define PLAYER_TITLE_SENIOR_SERGEANT       UI64LIT(0x0000000000040000) // 18
-#define PLAYER_TITLE_FIRST_SERGEANT        UI64LIT(0x0000000000080000) // 19
-#define PLAYER_TITLE_STONE_GUARD           UI64LIT(0x0000000000100000) // 20
-#define PLAYER_TITLE_BLOOD_GUARD           UI64LIT(0x0000000000200000) // 21
-#define PLAYER_TITLE_LEGIONNAIRE           UI64LIT(0x0000000000400000) // 22
-#define PLAYER_TITLE_CENTURION             UI64LIT(0x0000000000800000) // 23
-#define PLAYER_TITLE_CHAMPION              UI64LIT(0x0000000001000000) // 24
-#define PLAYER_TITLE_LIEUTENANT_GENERAL    UI64LIT(0x0000000002000000) // 25
-#define PLAYER_TITLE_GENERAL               UI64LIT(0x0000000004000000) // 26
-#define PLAYER_TITLE_WARLORD               UI64LIT(0x0000000008000000) // 27
-#define PLAYER_TITLE_HIGH_WARLORD          UI64LIT(0x0000000010000000) // 28
-#define PLAYER_TITLE_GLADIATOR             UI64LIT(0x0000000020000000) // 29
-#define PLAYER_TITLE_DUELIST               UI64LIT(0x0000000040000000) // 30
-#define PLAYER_TITLE_RIVAL                 UI64LIT(0x0000000080000000) // 31
-#define PLAYER_TITLE_CHALLENGER            UI64LIT(0x0000000100000000) // 32
-#define PLAYER_TITLE_SCARAB_LORD           UI64LIT(0x0000000200000000) // 33
-#define PLAYER_TITLE_CONQUEROR             UI64LIT(0x0000000400000000) // 34
-#define PLAYER_TITLE_JUSTICAR              UI64LIT(0x0000000800000000) // 35
-#define PLAYER_TITLE_CHAMPION_OF_THE_NAARU UI64LIT(0x0000001000000000) // 36
-#define PLAYER_TITLE_MERCILESS_GLADIATOR   UI64LIT(0x0000002000000000) // 37
-#define PLAYER_TITLE_OF_THE_SHATTERED_SUN  UI64LIT(0x0000004000000000) // 38
-#define PLAYER_TITLE_HAND_OF_ADAL          UI64LIT(0x0000008000000000) // 39
-#define PLAYER_TITLE_VENGEFUL_GLADIATOR    UI64LIT(0x0000010000000000) // 40
+// can't use enum for uint64 values...yes you can.  just gotta know how.  ;)
+namespace Player {
+    namespace Title {
+        enum:uint64_t {
+            DISABLED              = 0x0000000000000000,
+            NONE                  = 0x0000000000000001,
+            // alliance
+            PRIVATE               = 0x0000000000000002, // 1
+            CORPORAL              = 0x0000000000000004, // 2
+            SERGEANT_A            = 0x0000000000000008, // 3
+            MASTER_SERGEANT       = 0x0000000000000010, // 4
+            SERGEANT_MAJOR        = 0x0000000000000020, // 5
+            KNIGHT                = 0x0000000000000040, // 6
+            KNIGHT_LIEUTENANT     = 0x0000000000000080, // 7
+            KNIGHT_CAPTAIN        = 0x0000000000000100, // 8
+            KNIGHT_CHAMPION       = 0x0000000000000200, // 9
+            LIEUTENANT_COMMANDER  = 0x0000000000000400, // 10
+            COMMANDER             = 0x0000000000000800, // 11
+            MARSHAL               = 0x0000000000001000, // 12
+            FIELD_MARSHAL         = 0x0000000000002000, // 13
+            GRAND_MARSHAL         = 0x0000000000004000, // 14
+            // horde
+            SCOUT                 = 0x0000000000008000, // 15
+            GRUNT                 = 0x0000000000010000, // 16
+            SERGEANT_H            = 0x0000000000020000, // 17
+            SENIOR_SERGEANT       = 0x0000000000040000, // 18
+            FIRST_SERGEANT        = 0x0000000000080000, // 19
+            STONE_GUARD           = 0x0000000000100000, // 20
+            BLOOD_GUARD           = 0x0000000000200000, // 21
+            LEGIONNAIRE           = 0x0000000000400000, // 22
+            CENTURION             = 0x0000000000800000, // 23
+            CHAMPION              = 0x0000000001000000, // 24
+            LIEUTENANT_GENERAL    = 0x0000000002000000, // 25
+            GENERAL               = 0x0000000004000000, // 26
+            WARLORD               = 0x0000000008000000, // 27
+            HIGH_WARLORD          = 0x0000000010000000, // 28
+            // other
+            GLADIATOR             = 0x0000000020000000, // 29
+            DUELIST               = 0x0000000040000000, // 30
+            RIVAL                 = 0x0000000080000000, // 31
+            CHALLENGER            = 0x0000000100000000, // 32
+            SCARAB_LORD           = 0x0000000200000000, // 33
+            CONQUEROR             = 0x0000000400000000, // 34
+            JUSTICAR              = 0x0000000800000000, // 35
+            CHAMPION_OF_THE_NAARU = 0x0000001000000000, // 36
+            MERCILESS_GLADIATOR   = 0x0000002000000000, // 37
+            OF_THE_SHATTERED_SUN  = 0x0000004000000000, // 38
+            HAND_OF_ADAL          = 0x0000008000000000, // 39
+            VENGEFUL_GLADIATOR    = 0x0000010000000000, // 40
+            // combos/masks
+            MASK_ALLIANCE_PVP     = (PRIVATE | CORPORAL | SERGEANT_A | MASTER_SERGEANT | SERGEANT_MAJOR | KNIGHT | KNIGHT_LIEUTENANT | KNIGHT_CAPTAIN | \
+                                    KNIGHT_CHAMPION | LIEUTENANT_COMMANDER | COMMANDER | MARSHAL | FIELD_MARSHAL | GRAND_MARSHAL),
+            MASK_HORDE_PVP        = (SCOUT | GRUNT | SERGEANT_H | SENIOR_SERGEANT | FIRST_SERGEANT | STONE_GUARD | BLOOD_GUARD | LEGIONNAIRE |\
+                                    CENTURION | CHAMPION | LIEUTENANT_GENERAL | GENERAL | WARLORD | HIGH_WARLORD),
+            MASK_ALL_PVP          = (MASK_ALLIANCE_PVP | MASK_HORDE_PVP)
+        };
+    }
+}
+
+enum HonorKillPvPRank
+{
+    HKRANK00 = 1,
+    HKRANK01,
+    HKRANK02,
+    HKRANK03,
+    HKRANK04,
+    HKRANK05,
+    HKRANK06,
+    HKRANK07,
+    HKRANK08,
+    HKRANK09,
+    HKRANK10,
+    HKRANK11,
+    HKRANK12,
+    HKRANK13,
+    HKRANK14,
+    HKRANKMAX
+};
+
+enum eKills
+{
+    KILLS_1 = 10,
+    KILLS_2 = 50,
+    KILLS_3 = 100,
+    KILLS_4 = 200,
+    KILLS_5 = 450,
+    KILLS_6 = 750,
+    KILLS_7 = 1300,
+    KILLS_8 = 2000,
+    KILLS_9 = 3500,
+    KILLS_10 = 6000,
+    KILLS_11 = 9500,
+    KILLS_12 = 15000,
+    KILLS_13 = 21000,
+    KILLS_14 = 30000,
+    KILLS_15 = 50000
+};
 
 #define KNOWN_TITLES_SIZE   3
 #define MAX_TITLE_INDEX     (KNOWN_TITLES_SIZE*64)          // 3 uint64 fields
@@ -2966,7 +3020,7 @@ void RemoveItemsSetItem(Player* player, ItemTemplate const* proto);
 
 // "the bodies of template functions must be made available in a header file"
 template <class T> T Player::ApplySpellMod(uint32 spellId, SpellModOp op, T &basevalue, Spell* spell, bool temporaryPet)
-{ 
+{
     SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(spellId);
     if (!spellInfo)
         return 0;

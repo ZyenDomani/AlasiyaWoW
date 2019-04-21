@@ -7314,21 +7314,21 @@ bool Player::RewardHonor(Unit* uVictim, uint32 groupsize, int32 honor, bool awar
             // BEGIN pvp_titles - allan (3.0)
             // PLAYER__FIELD_KNOWN_TITLES describe which titles player can use,
             // so we must find biggest pvp title , even for killer to find extra honor value
-            /*
+            /*  still needs work...
             uint32 vtitle = victim->GetUInt32Value(PLAYER__FIELD_KNOWN_TITLES);
-            //uint32 victim_title = 0;
             uint32 ktitle = GetUInt32Value(PLAYER__FIELD_KNOWN_TITLES);
             uint32 killer_title = 0;
-            if (PLAYER_TITLE_MASK_ALL_PVP & ktitle)
-                for (int i = ((GetTeam() == ALLIANCE) ? 1:HKRANKMAX);i!=((GetTeam() == ALLIANCE) ? HKRANKMAX : (2*HKRANKMAX-1));++i)
+            if (Player::Title::MASK_ALL_PVP & ktitle)
+                for (int i = ((GetTeamId() == ALLIANCE) ? 1:HKRANKMAX);i!=((GetTeamId() == ALLIANCE) ? HKRANKMAX : (2*HKRANKMAX-1));++i)
                     if (ktitle & (1<<i))
                         killer_title = i;
 
-            if (PLAYER_TITLE_MASK_ALL_PVP & vtitle)
-                for (int i = ((victim->GetTeam() == ALLIANCE) ? 1:HKRANKMAX);i!=((victim->GetTeam() == ALLIANCE) ? HKRANKMAX : (2*HKRANKMAX-1));++i)
+            if (Player::Title::MASK_ALL_PVP & vtitle)
+                for (int i = ((victim->GetTeamId() == ALLIANCE) ? 1:HKRANKMAX);i!=((victim->GetTeamId() == ALLIANCE) ? HKRANKMAX : (2*HKRANKMAX-1));++i)
                     if (vtitle & (1<<i))
                         victim_title = i;
             */
+
             // Get Killer titles, CharTitlesEntry::bit_index
             // Ranks:
             //  title[1..14]  -> rank[5..18]
