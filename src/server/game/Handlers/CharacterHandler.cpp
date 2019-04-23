@@ -1238,7 +1238,7 @@ void WorldSession::HandlePlayerLoginFromDB(LoginQueryHolder* holder)
     handler.PSendSysMessage("|cff00ff00Hi,|r %s", pCurrChar->GetName().c_str());
     handler.PSendSysMessage("|cff00ff00Your IP:|r %s", pCurrChar->GetSession()->GetRemoteAddress().c_str());
     handler.PSendSysMessage("|cff00ff00Now|r %u |cff00ff00players online|r |cff00ff00(max:|r %u|cff00ff00)|r", sWorld->GetPlayerCount(), sWorld->GetMaxActiveSessionCount());
-    handler.PSendSysMessage("|cff00ff00Server uptime:|r %s", secsToTimeString(sWorld->GetUptime());
+    handler.PSendSysMessage("|cff00ff00Server uptime:|r %s", secsToTimeString(sWorld->GetUptime()).c_str());
 
     delete holder;
 }
