@@ -419,10 +419,10 @@ void World::LoadModuleConfigSettings()
 #if PLATFORM == PLATFORM_WINDOWS
         cfg_file = configFile;
 #endif
-        std::string cfg_def_file = cfg_file + ".dist";
 
         // Load .conf.dist config
-        /*  why??
+        std::string cfg_def_file = conf_path + "/dist/" + configFile + ".dist";
+        /*  why?? */
         if (!sConfigMgr->LoadMore(cfg_def_file.c_str()))
         {
             sLog->outString();
@@ -430,7 +430,7 @@ void World::LoadModuleConfigSettings()
             sLog->outError("Module config: Verify that the file exists and has \'[worldserver]' written in the top of the file!");
             sLog->outError("Module config: Use default settings!");
             sLog->outString();
-        } */
+        }
 
         // Load .conf config
         if (!sConfigMgr->LoadMore(cfg_file.c_str()))
@@ -477,7 +477,7 @@ void World::LoadConfigSettings(bool reload)
     ///- Read the player limit and the Message of the day from the config file
     if (!reload)
         SetPlayerAmountLimit(sConfigMgr->GetIntDefault("PlayerLimit", 100));
-    Motd::SetMotd(sConfigMgr->GetStringDefault("Motd", "Welcome to an AzerothCore server"));
+    Motd::SetMotd(sConfigMgr->GetStringDefault("Motd", "Welcome to Alasiya\'s AzerothCore server"));
 
     ///- Read ticket system setting from the config file
     m_bool_configs[CONFIG_ALLOW_TICKETS] = sConfigMgr->GetBoolDefault("AllowTickets", true);
@@ -1288,7 +1288,7 @@ void World::LoadConfigSettings(bool reload)
 
     /** World of Warcraft Armory **/
     m_bool_configs[CONFIG_ARMORY_ENABLE] = sConfigMgr->GetBoolDefault("Armory.Enable", true);
-    
+
     // MySQL ping time interval
     m_int_configs[CONFIG_DB_PING_INTERVAL] = sConfigMgr->GetIntDefault("MaxPingTime", 30);
 
@@ -2062,7 +2062,7 @@ void World::Update(uint32 diff)
         m_updateTimeSum += diff;
         if (m_updateTimeSum > m_int_configs[CONFIG_INTERVAL_LOG_UPDATE])
         {
-            sLog->outBasic("Average update time diff: %u. Players online: %u.", avgDiffTracker.getAverage(), (uint32)GetActiveSessionCount());
+            sLog->outBasic("Average update time diff: %u. Players online: %u.", avgDiffTracker.getAverage(), GetActiveSessionCount());
             m_updateTimeSum = 0;
         }
     }

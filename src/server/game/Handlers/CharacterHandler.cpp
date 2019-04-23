@@ -771,7 +771,7 @@ void WorldSession::HandlePlayerLoginOpcode(WorldPacket & recvData)
         KickPlayer("Account can't login with this character");
         return;
     }
-    
+
     // pussywizard:
     if (WorldSession* sess = sWorld->FindOfflineSessionForCharacterGUID(GUID_LOPART(playerGuid)))
         if (sess->GetAccountId() != GetAccountId())
@@ -1202,6 +1202,44 @@ void WorldSession::HandlePlayerLoginFromDB(LoginQueryHolder* holder)
     }
 
     sScriptMgr->OnPlayerLogin(pCurrChar);
+
+    // Announce Player Login   - allan
+    std::string teamColor = "";
+    std::string classColor = "";
+
+    if (pCurrChar->GetTeamId(true) == TEAM_HORDE)
+        teamColor = CUSTOM_RED;
+    else
+        teamColor = CUSTOM_BLUE;
+
+    switch (pCurrChar->getClass()) {
+        case CLASS_WARRIOR:         classColor = MSG_COLOR_WARRIOR;         break;
+        case CLASS_PALADIN:         classColor = MSG_COLOR_PALADIN;         break;
+        case CLASS_HUNTER:          classColor = MSG_COLOR_HUNTER;          break;
+        case CLASS_ROGUE:           classColor = MSG_COLOR_ROGUE;           break;
+        case CLASS_PRIEST:          classColor = MSG_COLOR_PRIEST;          break;
+        case CLASS_SHAMAN:          classColor = MSG_COLOR_SHAMAN;          break;
+        case CLASS_MAGE:            classColor = MSG_COLOR_MAGE;            break;
+        case CLASS_WARLOCK:         classColor = MSG_COLOR_WARLOCK;         break;
+        case CLASS_DRUID:           classColor = MSG_COLOR_DRUID;           break;
+        case CLASS_DEATH_KNIGHT:    classColor = MSG_COLOR_DEATH_KNIGHT;    break;
+    }
+
+    std::ostringstream ss;
+    ss << MSG_COLOR_PURPLE << "SERVER:|r ";
+    ss << teamColor << "[" << CUSTOM_LIGHTRED << pCurrChar->getLevel() << ":";
+    ss << classColor << pCurrChar->GetName() << teamColor << "]|r";
+    ss << " has arrived.";  // @todo add location?
+    sWorld->SendServerMessage(SERVER_MSG_STRING, ss.str().c_str());
+
+    // misc login data sent to player on login.
+    // taken from Kargatum-system and modified for Alasiya by allan
+    ChatHandler handler(pCurrChar->GetSession());
+    handler.PSendSysMessage("|cff00ff00Hi,|r %s", pCurrChar->GetName().c_str());
+    handler.PSendSysMessage("|cff00ff00Your IP:|r %s", pCurrChar->GetSession()->GetRemoteAddress().c_str());
+    handler.PSendSysMessage("|cff00ff00Now|r %u |cff00ff00players online|r |cff00ff00(max:|r %u|cff00ff00)|r", sWorld->GetPlayerCount(), sWorld->GetMaxActiveSessionCount());
+    handler.PSendSysMessage("|cff00ff00Server uptime:|r %s", secsToTimeString(sWorld->GetUptime());
+
     delete holder;
 }
 
@@ -1299,7 +1337,7 @@ void WorldSession::HandlePlayerLoginToCharInWorld(Player* pCurrChar)
             }
         }
     }
-    
+
     if (Group* group = pCurrChar->GetGroup())
         group->SendUpdate();
 
@@ -1980,7 +2018,7 @@ void WorldSession::HandleEquipmentSetUse(WorldPacket &recvData)
             item = _player->GetItemByGuid(itemGuid);
 
         uint16 dstpos = i | (INVENTORY_SLOT_BAG_0 << 8);
-        
+
         InventoryResult msg;
 
         Item* uItem = _player->GetItemByPos(INVENTORY_SLOT_BAG_0, i);
@@ -2266,7 +2304,7 @@ void WorldSession::HandleCharFactionOrRaceChange(WorldPacket& recvData)
 
     // xinef: update global data
     sWorld->UpdateGlobalNameData(GUID_LOPART(guid), playerData->name, newname);
-    sWorld->UpdateGlobalPlayerData(GUID_LOPART(guid), 
+    sWorld->UpdateGlobalPlayerData(GUID_LOPART(guid),
         PLAYER_UPDATE_DATA_NAME|PLAYER_UPDATE_DATA_RACE|PLAYER_UPDATE_DATA_GENDER, newname, 0, gender, race);
 
     if (oldRace != race)
