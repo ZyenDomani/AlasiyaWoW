@@ -420,9 +420,9 @@ void World::LoadModuleConfigSettings()
         cfg_file = configFile;
 #endif
 
-        std::string cfg_def_file = cfg_file + ".dist";
-        
         // Load .conf.dist config
+        std::string cfg_def_file = conf_path + "/dist/" + configFile + ".dist";
+
         if (!sConfigMgr->LoadMore(cfg_def_file.c_str()))
         {
             sLog->outString();
