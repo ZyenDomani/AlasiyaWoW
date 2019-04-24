@@ -1245,9 +1245,14 @@ void WorldSession::HandlePlayerLoginFromDB(LoginQueryHolder* holder)
     handler.PSendSysMessage("|cff00ff00Server uptime:|r %s", secsToTimeString(sWorld->GetUptime()).c_str());
 
     // display login on console
+    auto t = std::time(nullptr);
+    auto tm = *std::localtime(&t);
+    char buf[50];
+    std::strftime(buf, 50, "%d-%m-%Y %H-%M-%S", &tm);
     sLog->SetColor(true, CYAN);
-    sLog->outString("%s has logged in from  IP %s (Level %u %s on AccountID %u)", \
-        playerName, pCurrChar->GetSession()->GetRemoteAddress().c_str(), pCurrChar->getLevel(), pClass.c_str(), pCurrChar->GetSession()->GetAccountId());
+    sLog->outString("%s - %s has logged in from  IP %s (Level %u %s on AccountID %u)", \
+        buf, playerName, pCurrChar->GetSession()->GetRemoteAddress().c_str(), pCurrChar->getLevel(), \
+        pClass.c_str(), pCurrChar->GetSession()->GetAccountId());
     sLog->ResetColor(true);
 
     delete holder;
