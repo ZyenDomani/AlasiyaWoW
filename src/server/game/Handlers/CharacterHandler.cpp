@@ -1206,6 +1206,7 @@ void WorldSession::HandlePlayerLoginFromDB(LoginQueryHolder* holder)
     // Announce Player Login   - allan
     std::string teamColor = "";
     std::string classColor = "";
+    std::string pClass = "";
 
     if (pCurrChar->GetTeamId(true) == TEAM_HORDE)
         teamColor = CUSTOM_RED;
@@ -1213,32 +1214,41 @@ void WorldSession::HandlePlayerLoginFromDB(LoginQueryHolder* holder)
         teamColor = CUSTOM_BLUE;
 
     switch (pCurrChar->getClass()) {
-        case CLASS_WARRIOR:         classColor = MSG_COLOR_WARRIOR;         break;
-        case CLASS_PALADIN:         classColor = MSG_COLOR_PALADIN;         break;
-        case CLASS_HUNTER:          classColor = MSG_COLOR_HUNTER;          break;
-        case CLASS_ROGUE:           classColor = MSG_COLOR_ROGUE;           break;
-        case CLASS_PRIEST:          classColor = MSG_COLOR_PRIEST;          break;
-        case CLASS_SHAMAN:          classColor = MSG_COLOR_SHAMAN;          break;
-        case CLASS_MAGE:            classColor = MSG_COLOR_MAGE;            break;
-        case CLASS_WARLOCK:         classColor = MSG_COLOR_WARLOCK;         break;
-        case CLASS_DRUID:           classColor = MSG_COLOR_DRUID;           break;
-        case CLASS_DEATH_KNIGHT:    classColor = MSG_COLOR_DEATH_KNIGHT;    break;
+        case CLASS_WARRIOR:         classColor = MSG_COLOR_WARRIOR;         pClass = "Warrior";         break;
+        case CLASS_PALADIN:         classColor = MSG_COLOR_PALADIN;         pClass = "Paladin";         break;
+        case CLASS_HUNTER:          classColor = MSG_COLOR_HUNTER;          pClass = "Hunter";          break;
+        case CLASS_ROGUE:           classColor = MSG_COLOR_ROGUE;           pClass = "Rogue";           break;
+        case CLASS_PRIEST:          classColor = MSG_COLOR_PRIEST;          pClass = "Priest";          break;
+        case CLASS_SHAMAN:          classColor = MSG_COLOR_SHAMAN;          pClass = "Shaman";          break;
+        case CLASS_MAGE:            classColor = MSG_COLOR_MAGE;            pClass = "Mage";            break;
+        case CLASS_WARLOCK:         classColor = MSG_COLOR_WARLOCK;         pClass = "Warlock";         break;
+        case CLASS_DRUID:           classColor = MSG_COLOR_DRUID;           pClass = "Druid";           break;
+        case CLASS_DEATH_KNIGHT:    classColor = MSG_COLOR_DEATH_KNIGHT;    pClass = "Death Knight";    break;
     }
+
+    uint32 pLevel = pCurrChar->getLevel();
 
     std::ostringstream ss;
     ss << MSG_COLOR_PURPLE << "SERVER:|r ";
-    ss << teamColor << "[" << CUSTOM_LIGHTRED << pCurrChar->getLevel() << ":";
+    ss << teamColor << "[" << CUSTOM_LIGHTRED << pLevel << ":";
     ss << classColor << pCurrChar->GetName() << teamColor << "]|r";
     ss << " has arrived.";  // @todo add location?
     sWorld->SendServerMessage(SERVER_MSG_STRING, ss.str().c_str());
 
     // misc login data sent to player on login.
     // taken from Kargatum-system and modified for Alasiya by allan
+    const char* playerName = pCurrChar->GetName().c_str();
     ChatHandler handler(pCurrChar->GetSession());
-    handler.PSendSysMessage("|cff00ff00Hi,|r %s", pCurrChar->GetName().c_str());
-    handler.PSendSysMessage("|cff00ff00Your IP:|r %s", pCurrChar->GetSession()->GetRemoteAddress().c_str());
-    handler.PSendSysMessage("|cff00ff00Now|r %u |cff00ff00players online|r |cff00ff00(max:|r %u|cff00ff00)|r", sWorld->GetPlayerCount(), sWorld->GetMaxActiveSessionCount());
+    handler.PSendSysMessage("|cff00ff00Welcome back,|r %s", playerName);
+    //handler.PSendSysMessage("|cff00ff00Your IP:|r %s", pCurrChar->GetSession()->GetRemoteAddress().c_str());
+    handler.PSendSysMessage("|cff00ff00Currently|r %u |cff00ff00players online|r |cff00ff00(max:|r %u|cff00ff00)|r", sWorld->GetPlayerCount(), sWorld->GetMaxActiveSessionCount());
     handler.PSendSysMessage("|cff00ff00Server uptime:|r %s", secsToTimeString(sWorld->GetUptime()).c_str());
+
+    // display login on console
+    sLog->SetColor(true, CYAN);
+    sLog->outString("%s has logged in from  IP %s (Level %u %s on AccountID %u)", \
+        playerName, pCurrChar->GetSession()->GetRemoteAddress().c_str(), pCurrChar->getLevel(), pClass.c_str(), pCurrChar->GetSession()->GetAccountId());
+    sLog->ResetColor(true);
 
     delete holder;
 }

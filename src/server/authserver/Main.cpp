@@ -93,7 +93,8 @@ extern int main(int argc, char** argv)
     }
 
 
-    std::string cfg_def_file=_TRINITY_REALM_CONFIG;
+    std::string cfg_def_file = "dist/";
+    cfg_def_file += _TRINITY_REALM_CONFIG;
     cfg_def_file += ".dist";
 
     if (!sConfigMgr->LoadInitial(cfg_def_file.c_str())) {

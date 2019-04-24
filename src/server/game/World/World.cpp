@@ -422,7 +422,6 @@ void World::LoadModuleConfigSettings()
 
         // Load .conf.dist config
         std::string cfg_def_file = conf_path + "/dist/" + configFile + ".dist";
-        /*  why?? */
         if (!sConfigMgr->LoadMore(cfg_def_file.c_str()))
         {
             sLog->outString();
@@ -963,12 +962,12 @@ void World::LoadConfigSettings(bool reload)
 
     // log db cleanup interval
     m_int_configs[CONFIG_LOGDB_CLEARINTERVAL] = sConfigMgr->GetIntDefault("LogDB.Opt.ClearInterval", 10);
-    if (int32(m_int_configs[CONFIG_LOGDB_CLEARINTERVAL]) <= 0)
-    {
-        sLog->outError("LogDB.Opt.ClearInterval (%i) must be > 0, set to default 10.", m_int_configs[CONFIG_LOGDB_CLEARINTERVAL]);
-        m_int_configs[CONFIG_LOGDB_CLEARINTERVAL] = 10;
-    }
-    if (reload)
+    //if (int32(m_int_configs[CONFIG_LOGDB_CLEARINTERVAL]) <= 0)
+    //{
+    //    sLog->outError("LogDB.Opt.ClearInterval (%i) must be > 0, set to default 10.", m_int_configs[CONFIG_LOGDB_CLEARINTERVAL]);
+    //    m_int_configs[CONFIG_LOGDB_CLEARINTERVAL] = 10;
+    //}
+    if (reload && (int32(m_int_configs[CONFIG_LOGDB_CLEARINTERVAL]) > 0))
     {
         m_timers[WUPDATE_CLEANDB].SetInterval(m_int_configs[CONFIG_LOGDB_CLEARINTERVAL] * MINUTE * IN_MILLISECONDS);
         m_timers[WUPDATE_CLEANDB].Reset();
@@ -1858,7 +1857,8 @@ void World::SetInitialWorldSettings()
 
     m_timers[WUPDATE_CORPSES].SetInterval(20 * MINUTE * IN_MILLISECONDS);
                                                             //erase corpses every 20 minutes
-    m_timers[WUPDATE_CLEANDB].SetInterval(m_int_configs[CONFIG_LOGDB_CLEARINTERVAL]*MINUTE*IN_MILLISECONDS);
+    if (int32(m_int_configs[CONFIG_LOGDB_CLEARINTERVAL]) > 0)
+        m_timers[WUPDATE_CLEANDB].SetInterval(m_int_configs[CONFIG_LOGDB_CLEARINTERVAL]*MINUTE*IN_MILLISECONDS);
                                                             // clean logs table every 14 days by default
     m_timers[WUPDATE_AUTOBROADCAST].SetInterval(getIntConfig(CONFIG_AUTOBROADCAST_INTERVAL));
 
