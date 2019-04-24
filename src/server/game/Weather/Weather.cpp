@@ -210,7 +210,6 @@ bool Weather::UpdateWeather()
     if (!sWorld->SendZoneMessage(m_zone, &data))
         return false;
 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     ///- Log the event
     char const* wthstr;
     switch (state)
@@ -256,9 +255,9 @@ bool Weather::UpdateWeather()
             wthstr = "fine";
             break;
     }
+#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     sLog->outDetail("Change the weather of zone %u to %s.", m_zone, wthstr);
 #endif
-
     sScriptMgr->OnWeatherChange(this, state, m_grade);
     return true;
 }

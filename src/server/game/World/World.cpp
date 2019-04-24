@@ -147,7 +147,7 @@ World::~World()
         m_offlineSessions.erase(m_offlineSessions.begin());
     }
 
-    CliCommandHolder* command = nullptr;
+    CliCommandHolder* command = NULL;
     while (cliCmdQueue.next(command))
         delete command;
 
@@ -161,20 +161,20 @@ World::~World()
 Player* World::FindPlayerInZone(uint32 zone)
 {
     ///- circle through active sessions and return the first player found in the zone
-    Player* player(nullptr);
-    for (auto cur : m_sessions)
+    SessionMap::const_iterator itr;
+    for (itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
     {
-        if (cur.second == nullptr)
+        if (!itr->second)
             continue;
 
-        player = cur.second->GetPlayer();
-        if (player == nullptr)
+        Player* player = itr->second->GetPlayer();
+        if (!player)
             continue;
 
         if (player->IsInWorld() && player->GetZoneId() == zone)
             return player;
     }
-    return nullptr;
+    return NULL;
 }
 
 bool World::IsClosed() const
@@ -194,10 +194,11 @@ void World::SetClosed(bool val)
 WorldSession* World::FindSession(uint32 id) const
 {
     SessionMap::const_iterator itr = m_sessions.find(id);
+
     if (itr != m_sessions.end())
         return itr->second;                                 // also can return NULL for kicked session
-
-    return nullptr;
+    else
+        return NULL;
 }
 
 WorldSession* World::FindOfflineSession(uint32 id) const
@@ -205,18 +206,18 @@ WorldSession* World::FindOfflineSession(uint32 id) const
     SessionMap::const_iterator itr = m_offlineSessions.find(id);
     if (itr != m_offlineSessions.end())
         return itr->second;
-
-    return nullptr;
+    else
+        return NULL;
 }
 
 WorldSession* World::FindOfflineSessionForCharacterGUID(uint32 guidLow) const
 {
     if (m_offlineSessions.empty())
-        return nullptr;
-    for (auto cur : m_offlineSessions)
-        if (cur.second->GetGuidLow() == guidLow)
-            return cur.second;
-    return nullptr;
+        return NULL;
+    for (SessionMap::const_iterator itr = m_offlineSessions.begin(); itr != m_offlineSessions.end(); ++itr)
+        if (itr->second->GetGuidLow() == guidLow)
+            return itr->second;
+    return NULL;
 }
 
 /// Remove a given session
@@ -224,10 +225,9 @@ bool World::KickSession(uint32 id)
 {
     ///- Find the session, kick the user, but we can't delete session at this moment to prevent iterator invalidation
     SessionMap::const_iterator itr = m_sessions.find(id);
-    if (itr != m_sessions.end())
+
+    if (itr != m_sessions.end() && itr->second)
     {
-        if (itr->second == nullptr)
-            return false;
         if (itr->second->PlayerLoading())
             return false;
 
@@ -267,8 +267,8 @@ void World::AddSession_(WorldSession* s)
         if (oldSession->HandleSocketClosed())
         {
             // there should be no offline session if current one is logged onto a character
-            SessionMap::iterator iter = m_offlineSessions.find(oldSession->GetAccountId());
-            if (iter != m_offlineSessions.end())
+            SessionMap::iterator iter;
+            if ((iter = m_offlineSessions.find(oldSession->GetAccountId())) != m_offlineSessions.end())
             {
                 WorldSession* tmp = iter->second;
                 m_offlineSessions.erase(iter);
@@ -310,7 +310,7 @@ void World::AddSession_(WorldSession* s)
 
 bool World::HasRecentlyDisconnected(WorldSession* session)
 {
-    if (session == nullptr)
+    if (!session)
         return false;
 
     if (uint32 tolerance = getIntConfig(CONFIG_INTERVAL_DISCONNECT_TOLERANCE))
@@ -420,8 +420,9 @@ void World::LoadModuleConfigSettings()
         cfg_file = configFile;
 #endif
 
+        std::string cfg_def_file = cfg_file + ".dist";
+        
         // Load .conf.dist config
-        std::string cfg_def_file = conf_path + "/dist/" + configFile + ".dist";
         if (!sConfigMgr->LoadMore(cfg_def_file.c_str()))
         {
             sLog->outString();
@@ -2294,7 +2295,7 @@ namespace Trinity
     {
         public:
             typedef std::vector<WorldPacket*> WorldPacketList;
-            explicit WorldWorldTextBuilder(uint32 textId, va_list* args = nullptr) : i_textId(textId), i_args(args) {}
+            explicit WorldWorldTextBuilder(uint32 textId, va_list* args = NULL) : i_textId(textId), i_args(args) {}
             void operator()(WorldPacketList& data_list, LocaleConstant loc_idx)
             {
                 char const* text = sObjectMgr->GetTrinityString(i_textId, loc_idx);
@@ -2315,14 +2316,14 @@ namespace Trinity
                     do_helper(data_list, (char*)text);
             }
         private:
-            char* lineFromMessage(char*& pos) { char* start = strtok(pos, "\n"); pos = nullptr; return start; }
+            char* lineFromMessage(char*& pos) { char* start = strtok(pos, "\n"); pos = NULL; return start; }
             void do_helper(WorldPacketList& data_list, char* text)
             {
                 char* pos = text;
                 while (char* line = lineFromMessage(pos))
                 {
                     WorldPacket* data = new WorldPacket();
-                    ChatHandler::BuildChatPacket(*data, CHAT_MSG_SYSTEM, LANG_UNIVERSAL, 0, 0, line);
+                    ChatHandler::BuildChatPacket(*data, CHAT_MSG_SYSTEM, LANG_UNIVERSAL, NULL, NULL, line);
                     data_list.push_back(data);
                 }
             }
@@ -2343,7 +2344,7 @@ void World::SendWorldText(uint32 string_id, ...)
     Trinity::LocalizedPacketListDo<Trinity::WorldWorldTextBuilder> wt_do(wt_builder);
     for (SessionMap::const_iterator itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
     {
-        if ((itr->second == nullptr) || !itr->second->GetPlayer() || !itr->second->GetPlayer()->IsInWorld())
+        if (!itr->second || !itr->second->GetPlayer() || !itr->second->GetPlayer()->IsInWorld())
             continue;
 
         wt_do(itr->second->GetPlayer());
@@ -2362,7 +2363,7 @@ void World::SendGMText(uint32 string_id, ...)
     Trinity::LocalizedPacketListDo<Trinity::WorldWorldTextBuilder> wt_do(wt_builder);
     for (SessionMap::iterator itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
     {
-        if ((itr->second == nullptr) || !itr->second->GetPlayer() || !itr->second->GetPlayer()->IsInWorld())
+        if (!itr->second || !itr->second->GetPlayer() || !itr->second->GetPlayer()->IsInWorld())
             continue;
 
         if (AccountMgr::IsPlayerAccount(itr->second->GetSecurity()))
@@ -2385,7 +2386,7 @@ void World::SendGlobalText(const char* text, WorldSession* self)
 
     while (char* line = ChatHandler::LineFromMessage(pos))
     {
-        ChatHandler::BuildChatPacket(data, CHAT_MSG_SYSTEM, LANG_UNIVERSAL, 0, 0, line);
+        ChatHandler::BuildChatPacket(data, CHAT_MSG_SYSTEM, LANG_UNIVERSAL, NULL, NULL, line);
         SendGlobalMessage(&data, self);
     }
 
@@ -2396,16 +2397,18 @@ void World::SendGlobalText(const char* text, WorldSession* self)
 bool World::SendZoneMessage(uint32 zone, WorldPacket* packet, WorldSession* self, TeamId teamId)
 {
     bool foundPlayerToSend = false;
-    for (auto cur : m_sessions)
+    SessionMap::const_iterator itr;
+
+    for (itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
     {
-        if ((cur.second != nullptr) &&
-            cur.second->GetPlayer() &&
-            cur.second->GetPlayer()->IsInWorld() &&
-            (cur.second->GetPlayer()->GetZoneId() == zone) &&
-            cur.second != self &&
-            (teamId == TEAM_NEUTRAL || cur.second->GetPlayer()->GetTeamId() == teamId))
+        if (itr->second &&
+            itr->second->GetPlayer() &&
+            itr->second->GetPlayer()->IsInWorld() &&
+            itr->second->GetPlayer()->GetZoneId() == zone &&
+            itr->second != self &&
+            (teamId == TEAM_NEUTRAL || itr->second->GetPlayer()->GetTeamId() == teamId))
         {
-            cur.second->SendPacket(packet);
+            itr->second->SendPacket(packet);
             foundPlayerToSend = true;
         }
     }
@@ -2417,7 +2420,7 @@ bool World::SendZoneMessage(uint32 zone, WorldPacket* packet, WorldSession* self
 void World::SendZoneText(uint32 zone, const char* text, WorldSession* self, TeamId teamId)
 {
     WorldPacket data;
-    ChatHandler::BuildChatPacket(data, CHAT_MSG_SYSTEM, LANG_UNIVERSAL, 0, 0, text);
+    ChatHandler::BuildChatPacket(data, CHAT_MSG_SYSTEM, LANG_UNIVERSAL, NULL, NULL, text);
     SendZoneMessage(zone, &data, self, teamId);
 }
 
@@ -2427,21 +2430,21 @@ void World::KickAll()
     m_QueuedPlayer.clear();                                 // prevent send queue update packet and login queued sessions
 
     // session not removed at kick and will removed in next update tick
-    for (auto cur : m_sessions)
-        cur.second->KickPlayer("KickAll sessions");
+    for (SessionMap::const_iterator itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
+        itr->second->KickPlayer("KickAll sessions");
 
     // pussywizard: kick offline sessions
-    for (auto cur : m_offlineSessions)
-        cur.second->KickPlayer("KickAll offline sessions");
+    for (SessionMap::const_iterator itr = m_offlineSessions.begin(); itr != m_offlineSessions.end(); ++itr)
+        itr->second->KickPlayer("KickAll offline sessions");
 }
 
 /// Kick (and save) all players with security level less `sec`
 void World::KickAllLess(AccountTypes sec)
 {
     // session not removed at kick and will removed in next update tick
-    for (auto cur : m_sessions)
-        if (cur.second->GetSecurity() < sec)
-            cur.second->KickPlayer("KickAllLess");
+    for (SessionMap::const_iterator itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
+        if (itr->second->GetSecurity() < sec)
+            itr->second->KickPlayer("KickAllLess");
 }
 
 /// Update the game time
@@ -2566,7 +2569,7 @@ void World::SendServerMessage(ServerMessageType type, const char *text, Player* 
 void World::UpdateSessions(uint32 diff)
 {
     ///- Add new sessions
-    WorldSession* sess = nullptr;
+    WorldSession* sess = NULL;
     while (addSessQueue.next(sess))
         AddSession_ (sess);
 
@@ -2633,13 +2636,13 @@ void World::UpdateSessions(uint32 diff)
 // This handles the issued and queued CLI commands
 void World::ProcessCliCommands()
 {
-    CliCommandHolder::Print* zprint = nullptr;
-    void* callbackArg = nullptr;
-    CliCommandHolder* command = nullptr;
+    CliCommandHolder::Print* zprint = NULL;
+    void* callbackArg = NULL;
+    CliCommandHolder* command = NULL;
     while (cliCmdQueue.next(command))
     {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-        sLog->outDetail("CLI command processing...");
+        sLog->outDetail("CLI command under processing...");
 #endif
         zprint = command->m_print;
         callbackArg = command->m_callbackArg;
@@ -3252,7 +3255,7 @@ GlobalPlayerData const* World::GetGlobalPlayerData(uint32 guid) const
     }
 
     // Player not found
-    return nullptr;
+    return NULL;
 }
 
 uint32 World::GetGlobalPlayerGUID(std::string const& name) const
