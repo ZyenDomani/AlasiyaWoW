@@ -39,10 +39,14 @@ namespace AccountMgr
     std::string CalculateShaPassHash(std::string const& name, std::string const& password);
 
     bool normalizeString(std::string& utf8String);
-    bool IsPlayerAccount(uint32 gmlevel);
-    bool IsGMAccount(uint32 gmlevel);
-    bool IsAdminAccount(uint32 gmlevel);
-    bool IsConsoleAccount(uint32 gmlevel);
+    bool IsPlayerAccount(uint32 gmlevel);   // 1
+    bool IsStaffAccount(uint32 gmlevel);    // >1
+    bool IsGMAccount(uint32 gmlevel);       // >3
+    bool IsSupervisorAccount(uint32 gmlevel);   // 6
+    bool IsDevAccount(uint32 gmlevel);      // 7
+    bool IsAdminAccount(uint32 gmlevel);    // 8
+    bool IsOwnerAccount(uint32 gmlevel);    // 9
+    bool IsConsoleAccount(uint32 gmlevel);  // 10
 };
 
 #endif

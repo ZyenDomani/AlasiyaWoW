@@ -284,14 +284,34 @@ namespace AccountMgr
         return gmlevel == SEC_PLAYER;
     }
 
+    bool IsStaffAccount(uint32 gmlevel)
+    {
+        return gmlevel > SEC_PLAYER && gmlevel < SEC_CONSOLE;
+    }
+
     bool IsGMAccount(uint32 gmlevel)
     {
         return gmlevel >= SEC_GAMEMASTER && gmlevel <= SEC_CONSOLE;
     }
 
+    bool IsDevAccount(uint32 gmlevel)
+    {
+        return gmlevel == SEC_DEVELOPER;
+    }
+
+    bool IsSupervisorAccount(uint32 gmlevel)
+    {
+        return gmlevel == SEC_SUPERVISOR;
+    }
+
     bool IsAdminAccount(uint32 gmlevel)
     {
         return gmlevel >= SEC_ADMINISTRATOR && gmlevel <= SEC_CONSOLE;
+    }
+
+    bool IsOwnerAccount(uint32 gmlevel)
+    {
+        return gmlevel == SEC_OWNER;
     }
 
     bool IsConsoleAccount(uint32 gmlevel)

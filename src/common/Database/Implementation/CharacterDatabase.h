@@ -412,6 +412,8 @@ enum CharacterDatabaseStatements
     CHAR_DEL_CHAR_GLYPHS,
     CHAR_DEL_CHAR_TALENT,
     CHAR_DEL_CHAR_SKILLS,
+    CHAR_DEL_ARMORY_STATS, // armory - allan
+    CHAR_DEL_FEED_LOG, // armory - allan
     CHAR_UDP_CHAR_HONOR_POINTS,
     CHAR_UDP_CHAR_ARENA_POINTS,
     CHAR_UDP_CHAR_MONEY,

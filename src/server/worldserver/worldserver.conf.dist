@@ -3231,7 +3231,7 @@ Minigob.Manabonk.Enable = 1
 #        Description: Logs actions, e.g. account login and logout to name a few, based on IP of current session.
 #        Default:     0 - (Disabled)
 #                     1 - (Enabled)
- 
+
 Allow.IP.Based.Action.Logging = 0
 
 #     Calculate.Creature.Zone.Area.Data
@@ -3250,10 +3250,17 @@ Calculate.Gameoject.Zone.Area.Data = 0
 #    LFG SETTINGS
 #
 #     Includes satellite to search for work elsewhere LFG
-#        Default: 0 - Disable  
-#                 1 - Enable  
+#        Default: 0 - Disable
+#                 1 - Enable
 
 LFG.Location.All = 0
+
+#     WoW Armory
+#        Description: Activates the WowArmory.
+#        Default:     0 - (Disable)
+#                     1 - (Enable)
+
+Armory.Enable = 1
 
 #
 ###################################################################################################

@@ -3062,6 +3062,33 @@ enum ChatLinkColors
     CHAT_LINK_COLOR_GLYPH       = 0xff66bbff
 };
 
+// Chat msg colors - allan
+#define     MSG_COLOR_ORANGE         "|cffFFA500"
+#define     MSG_COLOR_DARKORANGE     "|cffFF8C00"
+#define     MSG_COLOR_RED            "|cffFF0000"
+#define     MSG_COLOR_LIGHTRED       "|cffD63931"
+#define     MSG_COLOR_ROYALBLUE      "|cff4169E1"
+#define     MSG_COLOR_LIGHTBLUE      "|cffADD8E6"
+#define     MSG_COLOR_YELLOW         "|cffFFFF00"
+#define     MSG_COLOR_GREEN          "|cff008000"
+#define     MSG_COLOR_PURPLE         "|cffDA70D6"
+#define     MSG_COLOR_WHITE          "|cffffffff"
+#define     MSG_COLOR_SUBWHITE       "|cffbbbbbb"
+#define     MSG_COLOR_DRUID          "|cffff7d0a"
+#define     MSG_COLOR_HUNTER         "|cffabd473"
+#define     MSG_COLOR_MAGE           "|cff69ccf0"
+#define     MSG_COLOR_PALADIN        "|cfff58cba"
+#define     MSG_COLOR_PRIEST         "|cffffffff"
+#define     MSG_COLOR_ROGUE          "|cfffff569"
+#define     MSG_COLOR_SHAMAN         "|cff0070de"
+#define     MSG_COLOR_WARLOCK        "|cff9482c9"
+#define     MSG_COLOR_WARRIOR        "|cffc79c6e"
+#define     MSG_COLOR_DEATH_KNIGHT   "|cffc41f3b"
+#define     CUSTOM_BLUE              "|cff00479e"
+#define     CUSTOM_RED               "|cffff0000"
+#define     CUSTOM_LIGHTRED          "|cffd63931"
+#define     CUSTOM_WHITE             "|cffffffff"
+
 // Values from ItemPetFood (power of (value-1) used for compare with CreatureFamilyEntry.petDietMask
 enum PetDiet
 {
