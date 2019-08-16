@@ -195,7 +195,7 @@ public:
                 return true;
 
             if (!creature->AI()->GetData(player->GetGUIDLow()))
-                AddGossipItemFor(player, 9465, 0, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
+                AddGossipItemFor(player, 9765, 0, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
 
             SendGossipMenuFor(player, player->GetGossipTextId(creature), creature->GetGUID());
         }
@@ -771,9 +771,9 @@ public:
 
                     for (uint8 i = 0; i < 12; ++i)
                     {
-                        if (GameObject* temp_prison = me->FindNearestGameObject(acherus_soul_prison[i], 30))
+                        if (GameObject* temp_prison = me->FindNearestGameObject(acherus_soul_prison[i], 100))
                         {
-                            if (me->IsWithinDist(temp_prison, dist, false))
+                            if (temp_prison && me->IsWithinDist(temp_prison, dist, false))
                             {
                                 dist = me->GetDistance2d(temp_prison);
                                 prison = temp_prison;

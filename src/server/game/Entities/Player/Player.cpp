@@ -1710,7 +1710,7 @@ void Player::Update(uint32 p_time)
 
     if (HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING))
     {
-        if (now > m_Last_tick && _restTime > 0)      // freeze update
+        if (now > m_Last_tick && _restTime > 0)             // freeze update
         {
             time_t currTime = time(NULL);
             time_t timeDiff = currTime - _restTime;
@@ -2881,11 +2881,11 @@ Creature* Player::GetNPCIfCanInteractWith(uint64 guid, uint32 npcflagmask)
         return NULL;
 
     // Deathstate checks
-    if (!IsAlive() && !(creature->GetCreatureTemplate()->type_flags & CREATURE_TYPEFLAGS_GHOST))
+    if (!IsAlive() && !(creature->GetCreatureTemplate()->type_flags & CREATURE_TYPE_FLAG_GHOST_VISIBLE))
         return NULL;
 
     // alive or spirit healer
-    if (!creature->IsAlive() && !(creature->GetCreatureTemplate()->type_flags & CREATURE_TYPEFLAGS_DEAD_INTERACT))
+    if (!creature->IsAlive() && !(creature->GetCreatureTemplate()->type_flags & CREATURE_TYPE_FLAG_CAN_INTERACT_WHILE_DEAD))
         return NULL;
 
     // appropriate npc type
@@ -6577,8 +6577,6 @@ void Player::SetSkill(uint16 id, uint16 step, uint16 newVal, uint16 maxVal)
             SetUInt32Value(PLAYER_SKILL_INDEX(i), MAKE_PAIR32(id, step));
             SetUInt32Value(PLAYER_SKILL_VALUE_INDEX(i), MAKE_SKILL_VALUE(newVal, maxVal));
             UpdateSkillEnchantments(id, currVal, newVal);
-            UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_REACH_SKILL_LEVEL, id);
-            UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_LEARN_SKILL_LEVEL, id);
 
             // insert new entry or update if not deleted old entry yet
             if (itr != mSkillStatus.end())
@@ -6606,6 +6604,8 @@ void Player::SetSkill(uint16 id, uint16 step, uint16 newVal, uint16 maxVal)
 
             // Learn all spells for skill
             learnSkillRewardedSpells(id, newVal);
+			UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_REACH_SKILL_LEVEL, id);
+			UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_LEARN_SKILL_LEVEL, id);
             return;
         }
     }
@@ -10244,7 +10244,7 @@ uint8 Player::FindEquipSlot(ItemTemplate const* proto, uint32 slot, bool swap) c
             {
                 if (ItemTemplate const* mhWeaponProto = mhWeapon->GetTemplate())
                 {
-                    if (mhWeaponProto->SubClass == ITEM_SUBCLASS_WEAPON_POLEARM || mhWeaponProto->SubClass == ITEM_SUBCLASS_WEAPON_STAFF || mhWeaponProto->SubClass == ITEM_SUBCLASS_WEAPON_FISHING_POLE)
+                    if (mhWeaponProto->SubClass == ITEM_SUBCLASS_WEAPON_POLEARM || mhWeaponProto->SubClass == ITEM_SUBCLASS_WEAPON_STAFF)
                     {
                         const_cast<Player*>(this)->AutoUnequipOffhandIfNeed(true);
                         break;
@@ -10254,7 +10254,7 @@ uint8 Player::FindEquipSlot(ItemTemplate const* proto, uint32 slot, bool swap) c
 
             if (GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND))
             {
-                if (proto->SubClass == ITEM_SUBCLASS_WEAPON_POLEARM || proto->SubClass == ITEM_SUBCLASS_WEAPON_STAFF || proto->SubClass == ITEM_SUBCLASS_WEAPON_FISHING_POLE)
+                if (proto->SubClass == ITEM_SUBCLASS_WEAPON_POLEARM || proto->SubClass == ITEM_SUBCLASS_WEAPON_STAFF)
                 {
                     const_cast<Player*>(this)->AutoUnequipOffhandIfNeed(true);
                     break;
@@ -12820,6 +12820,7 @@ Item* Player::EquipItem(uint16 pos, Item* pItem, bool update)
 #endif
 
     sScriptMgr->OnEquip(this, pItem, bag, slot, update);
+    UpdateForQuestWorldObjects();
     return pItem;
 }
 
@@ -14804,7 +14805,7 @@ void Player::SendItemDurations()
     }
 }
 
-void Player::SendNewItem(Item* item, uint32 count, bool received, bool created, bool broadcast)
+void Player::SendNewItem(Item* item, uint32 count, bool received, bool created, bool broadcast, bool sendChatMessage)
 { 
     if (!item)                                               // prevent crash
         return;
@@ -14814,7 +14815,7 @@ void Player::SendNewItem(Item* item, uint32 count, bool received, bool created, 
     data << uint64(GetGUID());                              // player GUID
     data << uint32(received);                               // 0=looted, 1=from npc
     data << uint32(created);                                // 0=received, 1=created
-    data << uint32(1);                                      // bool print error to chat
+    data << uint32(sendChatMessage);                        // bool print message to chat
     data << uint8(item->GetBagSlot());                      // bagslot
                                                             // item slot, but when added to stack: 0xFFFFFFFF
     data << uint32((item->GetCount() == count) ? item->GetSlot() : -1);
@@ -15848,7 +15849,7 @@ void Player::RewardQuest(Quest const* quest, uint32 reward, Object* questGiver, 
             if (CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, itemId, quest->RewardChoiceItemCount[reward]) == EQUIP_ERR_OK)
             {
                 Item* item = StoreNewItem(dest, itemId, true, Item::GenerateItemRandomPropertyId(itemId));
-                SendNewItem(item, quest->RewardChoiceItemCount[reward], true, false);
+                SendNewItem(item, quest->RewardChoiceItemCount[reward], true, false, false, false);
                 
                 sScriptMgr->OnQuestRewardItem(this, item, quest->RewardChoiceItemCount[reward]);
             }
@@ -15867,7 +15868,7 @@ void Player::RewardQuest(Quest const* quest, uint32 reward, Object* questGiver, 
                 if (CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, itemId, quest->RewardItemIdCount[i]) == EQUIP_ERR_OK)
                 {
                     Item* item = StoreNewItem(dest, itemId, true, Item::GenerateItemRandomPropertyId(itemId));
-                    SendNewItem(item, quest->RewardItemIdCount[i], true, false);
+                    SendNewItem(item, quest->RewardItemIdCount[i], true, false, false, false);
                     
                     sScriptMgr->OnQuestRewardItem(this, item, quest->RewardItemIdCount[i]);
                 }
@@ -16807,19 +16808,29 @@ QuestGiverStatus Player::GetQuestDialogStatus(Object* questgiver)
         {
             if (CanSeeStartQuest(quest))
             {
-                if (SatisfyQuestLevel(quest, false))
-                {
-                    if (quest->IsAutoComplete())
-                        result2 = DIALOG_STATUS_REWARD_REP;
-                    else if (getLevel() <= (GetQuestLevel(quest) + sWorld->getIntConfig(CONFIG_QUEST_LOW_LEVEL_HIDE_DIFF)))
-                    {
-                        if (quest->IsDaily())
-                            result2 = DIALOG_STATUS_AVAILABLE_REP;
+                if (SatisfyQuestLevel(quest, false)) {
+                    bool isLowLevel = (getLevel() > (GetQuestLevel(quest) + sWorld->getIntConfig(CONFIG_QUEST_LOW_LEVEL_HIDE_DIFF)));
+
+                    if (quest->IsAutoComplete()) {
+                        if (isLowLevel)
+                            result2 = DIALOG_STATUS_LOW_LEVEL_REWARD_REP;
                         else
-                            result2 = DIALOG_STATUS_AVAILABLE;
+                            result2 = DIALOG_STATUS_REWARD_REP;
                     }
-                    else
-                        result2 = DIALOG_STATUS_LOW_LEVEL_AVAILABLE;
+                    else {
+                        if (quest->IsDaily()) {
+                            if (isLowLevel)
+                                result2 = DIALOG_STATUS_LOW_LEVEL_AVAILABLE_REP;
+                            else
+                                result2 = DIALOG_STATUS_AVAILABLE_REP;
+                        }
+                        else {
+                            if (isLowLevel)
+                                result2 = DIALOG_STATUS_LOW_LEVEL_AVAILABLE;
+                            else
+                                result2 = DIALOG_STATUS_AVAILABLE;
+                        }
+                    }
                 }
                 else
                     result2 = DIALOG_STATUS_UNAVAILABLE;

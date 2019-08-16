@@ -188,6 +188,12 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
         if (!talker)
             break;
 
+        if (!sCreatureTextMgr->TextExist(talker->GetEntry(), uint8(e.action.talk.textGroupID)))
+        {
+            sLog->outErrorDb("SmartScript::ProcessAction: SMART_ACTION_TALK: EntryOrGuid %d SourceType %u EventType %u TargetType %u using non-existent Text id %u for talker %u, ignored.", e.entryOrGuid, e.GetScriptType(), e.GetEventType(), e.GetTargetType(), e.action.talk.textGroupID,talker->GetEntry());
+            break;
+        }
+
         mTalkerEntry = talker->GetEntry();
         mLastTextID = e.action.talk.textGroupID;
         mTextTimer = e.action.talk.duration;
@@ -1293,7 +1299,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
 
         for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
             if (IsCreature(*itr))
-                (*itr)->ToCreature()->UpdateEntry(e.action.updateTemplate.creature, NULL, !e.action.updateTemplate.doNotChangeLevel);
+                (*itr)->ToCreature()->UpdateEntry(e.action.updateTemplate.creature, NULL, e.action.updateTemplate.updateLevel != 0);
 
         delete targets;
         break;
@@ -1888,9 +1894,14 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
 
             me->GetMotionMaster()->MovePoint(e.action.MoveToPos.pointId, dest.x, dest.y, dest.z, true, true, e.action.MoveToPos.controlled ? MOTION_SLOT_CONTROLLED : MOTION_SLOT_ACTIVE);
         }
-        else // Xinef: we can use dest.x, dest.y, dest.z to make offset :)
-            me->GetMotionMaster()->MovePoint(e.action.MoveToPos.pointId, target->GetPositionX() + e.target.x, target->GetPositionY() + e.target.y, target->GetPositionZ() + e.target.z, true, true, e.action.MoveToPos.controlled ? MOTION_SLOT_CONTROLLED : MOTION_SLOT_ACTIVE);
-
+        else // Xinef: we can use dest.x, dest.y, dest.z to make offset
+        {
+            float x, y, z;
+            target->GetPosition(x, y, z);
+            if (e.action.MoveToPos.ContactDistance > 0)
+                target->GetContactPoint(me, x, y, z, e.action.MoveToPos.ContactDistance);
+            me->GetMotionMaster()->MovePoint(e.action.MoveToPos.pointId, x + e.target.x, y + e.target.y, z + e.target.z, e.action.MoveToPos.controlled ? MOTION_SLOT_CONTROLLED : MOTION_SLOT_ACTIVE);
+        }
         break;
     }
     case SMART_ACTION_MOVE_TO_POS_TARGET:

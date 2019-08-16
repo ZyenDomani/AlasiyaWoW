@@ -1348,7 +1348,7 @@ class Player : public Unit, public GridObject<Player>
             Item* mainItem = GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND);
             return mainItem && mainItem->GetTemplate()->InventoryType == INVTYPE_2HWEAPON && !CanTitanGrip();
         }
-        void SendNewItem(Item* item, uint32 count, bool received, bool created, bool broadcast = false);
+        void SendNewItem(Item* item, uint32 count, bool received, bool created, bool broadcast = false, bool sendChatMessage = true);
         bool BuyItemFromVendorSlot(uint64 vendorguid, uint32 vendorslot, uint32 item, uint8 count, uint8 bag, uint8 slot);
         bool _StoreOrEquipNewItem(uint32 vendorslot, uint32 item, uint8 count, uint8 bag, uint8 slot, int32 price, ItemTemplate const* pProto, Creature* pVendor, VendorItem const* crItem, bool bStore);
 
@@ -2217,6 +2217,8 @@ class Player : public Unit, public GridObject<Player>
         uint32 GetCurrentBattlegroundQueueSlot() const { return m_bgData.bgQueueSlot; }
         bool IsInvitedForBattlegroundInstance() const { return m_bgData.isInvited; }
         bool IsCurrentBattlegroundRandom() const { return m_bgData.bgIsRandom; }
+        BGData& GetBGData() { return m_bgData; }
+        void SetBGData(BGData& bgdata) { m_bgData = bgdata; }
         Battleground* GetBattleground(bool create = false) const;
 
         bool InBattlegroundQueue() const

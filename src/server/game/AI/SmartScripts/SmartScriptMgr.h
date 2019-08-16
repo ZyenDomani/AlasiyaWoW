@@ -466,7 +466,7 @@ enum SMART_ACTION
     SMART_ACTION_CALL_KILLEDMONSTER                 = 33,     // CreatureId,
     SMART_ACTION_SET_INST_DATA                      = 34,     // Field, Data
     SMART_ACTION_SET_INST_DATA64                    = 35,     // Field,
-    SMART_ACTION_UPDATE_TEMPLATE                    = 36,     // Entry, Team, doNotChangeLevel
+    SMART_ACTION_UPDATE_TEMPLATE                    = 36,     // Entry, UpdateLevel
     SMART_ACTION_DIE                                = 37,     // No Params
     SMART_ACTION_SET_IN_COMBAT_WITH_ZONE            = 38,     // No Params
     SMART_ACTION_CALL_FOR_HELP                      = 39,     // Radius, With Emote
@@ -499,7 +499,7 @@ enum SMART_ACTION
     SMART_ACTION_SET_ORIENTATION                    = 66,     //
     SMART_ACTION_CREATE_TIMED_EVENT                 = 67,     // id, InitialMin, InitialMax, RepeatMin(only if it repeats), RepeatMax(only if it repeats), chance
     SMART_ACTION_PLAYMOVIE                          = 68,     // entry
-    SMART_ACTION_MOVE_TO_POS                        = 69,     // PointId, xyz
+    SMART_ACTION_MOVE_TO_POS                        = 69,     // PointId (optional x,y,z offset), transport, controlled, ContactDistance
     SMART_ACTION_RESPAWN_TARGET                     = 70,     // force / goRespawnTime
     SMART_ACTION_EQUIP                              = 71,     // entry, slotmask slot1, slot2, slot3   , only slots with mask set will be sent to client, bits are 1, 2, 4, leaving mask 0 is defaulted to mask 7 (send all), slots1-3 are only used if no entry is set
     SMART_ACTION_CLOSE_GOSSIP                       = 72,     // none
@@ -810,8 +810,7 @@ struct SmartAction
         struct
         {
             uint32 creature;
-            uint32 team;
-            uint32 doNotChangeLevel;
+            uint32 updateLevel;
         } updateTemplate;
 
         struct
@@ -1048,6 +1047,7 @@ struct SmartAction
             uint32 pointId;
             uint32 transport;
             uint32 controlled;
+            uint32 ContactDistance;
         } MoveToPos;
 
         struct
