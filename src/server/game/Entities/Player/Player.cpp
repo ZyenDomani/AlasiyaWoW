@@ -19722,7 +19722,7 @@ void Player::SaveToDB(bool create, bool logout)
 
     CharacterDatabase.CommitTransaction(trans);
 
-    /* World of Warcraft Armory */
+    /** World of Warcraft Armory **/
     // Place this code AFTER CharacterDatabase.CommitTransaction(); to avoid some character saving errors.
     // Wowarmory feeds
     if (sWorld->getBoolConfig(CONFIG_ARMORY_ENABLE))
@@ -27590,6 +27590,7 @@ void Player::SummonPet(uint32 entry, float x, float y, float z, float ang, PetTy
     Pet::LoadPetFromDB(this, asynchLoadType, entry, 0, false, asynchPetInfo);
 }
 
+/* World of Warcraft Armory */
 void Player::InitWowarmoryFeeds()
 {
     // Clear feeds
@@ -27619,7 +27620,7 @@ void Player::CreateWowarmoryFeed(uint32 type, uint32 data, uint32 item_guid, uin
         sLog->outError("[Wowarmory]: empty data (GUID: %u), ignore.", GetGUIDLow());
         return;
     }
-    WowarmoryFeedEntry feed;
+    WowarmoryFeedEntry feed = WowarmoryFeedEntry();
     feed.guid = GetGUIDLow();
     feed.type = type;
     feed.data = data;

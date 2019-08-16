@@ -815,6 +815,7 @@ void Battleground::EndBattleground(TeamId winnerTeamId)
                 SetArenaTeamRatingChangeForTeam(winnerTeamId, winnerChange);
                 SetArenaTeamRatingChangeForTeam(GetOtherTeamId(winnerTeamId), loserChange);
 
+                // armory - allan
                 /** World of Warcraft Armory **/
                 if (sWorld->getBoolConfig(CONFIG_ARMORY_ENABLE))
                 {

@@ -81,6 +81,7 @@
 #ifdef ELUNA
 #include "LuaEngine.h"
 #endif
+#include "AuctionHouseBot.h"
 
 ACE_Atomic_Op<ACE_Thread_Mutex, bool> World::m_stopEvent = false;
 uint8 World::m_ExitCode = SHUTDOWN_EXIT_CODE;
@@ -1717,6 +1718,9 @@ void World::SetInitialWorldSettings()
     sLog->outString("Loading Completed Achievements...");
     sAchievementMgr->LoadCompletedAchievements();
 
+    // Initialize AHBot settings before deleting expired auctions due to AHBot hooks
+    auctionbot->InitializeConfiguration();
+
     ///- Load dynamic data tables from the database
     sLog->outString("Loading Item Auctions...");
     sAuctionMgr->LoadAuctionItems();
@@ -1958,6 +1962,9 @@ void World::SetInitialWorldSettings()
     sEluna->OnConfigLoad(false,false); // Must be done after Eluna is initialized and scripts have run.
 #endif
 
+    sLog->outString("Initialize AuctionHouseBot...");
+    auctionbot->Initialize();
+
     uint32 startupDuration = GetMSTimeDiffToNow(startupBegin);
     sLog->outString();
     sLog->outError("WORLD: World initialized in %u minutes %u seconds", (startupDuration / 60000), ((startupDuration % 60000) / 1000));
@@ -2125,6 +2132,7 @@ void World::Update(uint32 diff)
         {
             m_timers[WUPDATE_AUCTIONS].Reset();
 
+            auctionbot->Update();
             // pussywizard: handle expired auctions, auctions expired when realm was offline are also handled here (not during loading when many required things aren't loaded yet)
             sAuctionMgr->Update();
         }
