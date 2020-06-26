@@ -65,7 +65,7 @@ extern int main(int argc, char** argv)
         ++c;
     }
 
-    if (!sConfigMgr->LoadMore(cfg_file))
+    if (!sConfigMgr->LoadInitial(cfg_file))
     {
         printf("WARNING: Invalid or missing configuration file : %s\n", cfg_file);
         printf("Loading default config file.");
@@ -74,7 +74,7 @@ extern int main(int argc, char** argv)
         cfg_def_file += _TRINITY_CORE_CONFIG;
         cfg_def_file += ".dist";
 
-        if (!sConfigMgr->LoadInitial(cfg_def_file.c_str())) {
+        if (!sConfigMgr->LoadMore(cfg_def_file.c_str())) {
             printf("ERROR: Invalid or missing default configuration file : %s\n", cfg_def_file.c_str());
             return 1;
         }
