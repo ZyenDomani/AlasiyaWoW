@@ -11,6 +11,7 @@ Comment: All account related commands
 Category: commandscripts
 EndScriptData */
 
+#include <arpa/inet.h>
 #include "ScriptMgr.h"
 #include "AccountMgr.h"
 #include "Chat.h"

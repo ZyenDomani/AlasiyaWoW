@@ -6,6 +6,7 @@
 
 #include <algorithm>
 #include <openssl/md5.h>
+#include <arpa/inet.h>
 
 #include "Common.h"
 #include "Database/DatabaseEnv.h"
@@ -533,12 +534,12 @@ bool AuthSocket::_HandleLogonChallenge()
                     pkt.append(s.AsByteArray().get(), s.GetNumBytes());   // 32 bytes
                     pkt.append(unk3.AsByteArray(16).get(), 16);
                     uint8 securityFlags = 0;
-					
+
 					// Check if token is used
                     _tokenKey = fields[8].GetString();
                     if (!_tokenKey.empty())
                         securityFlags = 4;
-					
+
                     pkt << uint8(securityFlags);            // security flags (0x0...0x04)
 
                     if (securityFlags & 0x01)               // PIN input
@@ -729,7 +730,7 @@ bool AuthSocket::_HandleLogonProof()
                 return false;
             }
         }
-		
+
         if (_expversion & POST_BC_EXP_FLAG)                 // 2.x and 3.x clients
         {
             sAuthLogonProof_S proof;

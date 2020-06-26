@@ -339,6 +339,9 @@ enum WorldIntConfigs
     CONFIG_WARDEN_NUM_OTHER_CHECKS,
     CONFIG_BIRTHDAY_TIME,
     CONFIG_SOCKET_TIMEOUTTIME_ACTIVE,
+    CONFIG_AFK_PREVENT_LOGOUT,
+    CONFIG_ICC_BUFF_HORDE,
+    CONFIG_ICC_BUFF_ALLIANCE,
     INT_CONFIG_VALUE_COUNT
 };
 
@@ -773,7 +776,7 @@ class World
         char const* GetDBVersion() const { return m_DBVersion.c_str(); }
 
         void LoadAutobroadcasts();
-        
+
         void UpdateAreaDependentAuras();
 
         uint32 GetCleaningFlags() const { return m_CleaningFlags; }

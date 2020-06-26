@@ -76,7 +76,7 @@ public:
 
   /// Allows applications to control how the event gets the time
   /// of day.
-  void set_time_policy (TIME_POLICY const & time_policy)
+  void set_time_policy (TIME_POLICY const &rhs)
   {
 	this->time_policy_ = rhs;
   }

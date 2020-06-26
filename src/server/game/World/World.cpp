@@ -417,30 +417,26 @@ void World::LoadModuleConfigSettings()
         std::string conf_path = _CONF_DIR;
         std::string cfg_file = conf_path + "/" + configFile;
 
-#if PLATFORM == PLATFORM_WINDOWS
-        cfg_file = configFile;
-#endif
-
-        // Load .conf.dist config
-        std::string cfg_def_file = conf_path + "/dist/" + configFile + ".dist";
-
-        if (!sConfigMgr->LoadMore(cfg_def_file.c_str()))
-        {
-            sLog->outString();
-            sLog->outError("Module config: Invalid or missing configuration dist file : %s", cfg_def_file.c_str());
-            sLog->outError("Module config: Verify that the file exists and has \'[worldserver]' written in the top of the file!");
-            sLog->outError("Module config: Use default settings!");
-            sLog->outString();
-        }
-
         // Load .conf config
         if (!sConfigMgr->LoadMore(cfg_file.c_str()))
         {
             sLog->outString();
             sLog->outError("Module config: Invalid or missing configuration file : %s", cfg_file.c_str());
-            sLog->outError("Module config: Verify that the file exists and has \'[worldserver]' written in the top of the file!");
-            sLog->outError("Module config: Use default settings!");
+            //sLog->outError("Module config: Verify that the file exists and has \'[worldserver]' written in the top of the file!");
+            sLog->outError("Module config: Loading default settings.");
             sLog->outString();
+
+            // Load .conf.dist config
+            std::string cfg_def_file = conf_path + "/dist/" + configFile + ".dist";
+
+            if (!sConfigMgr->LoadMore(cfg_def_file.c_str()))
+            {
+                //sLog->outString();
+                sLog->outError("Module config: Invalid or missing configuration dist file : %s", cfg_def_file.c_str());
+                //sLog->outError("Module config: Verify that the file exists and has \'[worldserver]' written in the top of the file!");
+                //sLog->outError("Module config: Use default settings!");
+                sLog->outString();
+            }
         }
     }
 }
@@ -1325,6 +1321,16 @@ void World::LoadConfigSettings(bool reload)
 
     // Player can join LFG anywhere
     m_bool_configs[CONFIG_LFG_LOCATION_ALL] = sConfigMgr->GetBoolDefault("LFG.Location.All", false);
+
+    // Prevent players AFK from being logged out
+    m_int_configs[CONFIG_AFK_PREVENT_LOGOUT] = sConfigMgr->GetIntDefault("PreventAFKLogout", 0);
+
+    // Preload all grids of all non-instanced maps
+    //m_bool_configs[CONFIG_PRELOAD_ALL_NON_INSTANCED_MAP_GRIDS] = sConfigMgr->GetBoolDefault("PreloadAllNonInstancedMapGrids", false);
+
+    // ICC buff override
+    m_int_configs[CONFIG_ICC_BUFF_HORDE] = sConfigMgr->GetIntDefault("ICC.Buff.Horde", 73822);
+    m_int_configs[CONFIG_ICC_BUFF_ALLIANCE] = sConfigMgr->GetIntDefault("ICC.Buff.Alliance", 73828);
 
     // call ScriptMgr if we're reloading the configuration
     sScriptMgr->OnAfterConfigLoad(reload);

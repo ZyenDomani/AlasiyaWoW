@@ -437,7 +437,7 @@ void WorldSession::HandleItemQuerySingleOpcode(WorldPacket & recvData)
     {
      std::string Name = pProto->Name1;
      std::string Description = pProto->Description;
-    
+
      int loc_idx = GetSessionDbLocaleIndex();
      if (loc_idx >= 0)
      {
@@ -492,7 +492,7 @@ void WorldSession::HandleItemQuerySingleOpcode(WorldPacket & recvData)
          queryData << pProto->Damage[i].DamageMax;
          queryData << pProto->Damage[i].DamageType;
      }
-    
+
      // resistances (7)
      queryData << pProto->Armor;
      queryData << pProto->HolyRes;
@@ -501,11 +501,11 @@ void WorldSession::HandleItemQuerySingleOpcode(WorldPacket & recvData)
      queryData << pProto->FrostRes;
      queryData << pProto->ShadowRes;
      queryData << pProto->ArcaneRes;
-     
+
      queryData << pProto->Delay;
      queryData << pProto->AmmoType;
      queryData << pProto->RangedModRange;
-    
+
      for (int s = 0; s < MAX_ITEM_PROTO_SPELLS; ++s)
      {
          // send DBC data for cooldowns in same way as it used in Spell::SendSpellCooldown
@@ -514,11 +514,11 @@ void WorldSession::HandleItemQuerySingleOpcode(WorldPacket & recvData)
          if (spell)
          {
              bool db_data = pProto->Spells[s].SpellCooldown >= 0 || pProto->Spells[s].SpellCategoryCooldown >= 0;
-    
+
              queryData << pProto->Spells[s].SpellId;
              queryData << pProto->Spells[s].SpellTrigger;
              queryData << uint32(-abs(pProto->Spells[s].SpellCharges));
-    
+
              if (db_data)
              {
                  queryData << uint32(pProto->Spells[s].SpellCooldown);
@@ -940,7 +940,7 @@ void WorldSession::SendListInventory(uint64 vendorGuid)
                 ConditionList conditions = sConditionMgr->GetConditionsForNpcVendorEvent(vendor->GetEntry(), item->item);
                 if (!sConditionMgr->IsObjectMeetToConditions(_player, vendor, conditions))
                 {
-                    sLog->outError("SendListInventory: conditions not met for creature entry %u item %u", vendor->GetEntry(), item->item);
+                    sLog->outError(LOG_FILTER_NETWORKIO, "SendListInventory: conditions not met for creature entry %u item %u", vendor->GetEntry(), item->item);
                     continue;
                 }
 
@@ -1239,7 +1239,7 @@ void WorldSession::HandleItemNameQueryOpcode(WorldPacket & recvData)
         if (loc_idx >= 0)
             if (ItemSetNameLocale const* isnl = sObjectMgr->GetItemSetNameLocale(itemid))
                 ObjectMgr::GetLocaleString(isnl->Name, loc_idx, Name);
-        
+
         WorldPacket data(SMSG_ITEM_NAME_QUERY_RESPONSE, (4+Name.size()+1+4));
         data << uint32(itemid);
         data << Name;
@@ -1630,7 +1630,7 @@ void WorldSession::HandleItemRefund(WorldPacket &recvData)
 #endif
         return;
     }
-  
+
     // Don't try to refund item currently being disenchanted
     if (_player->GetLootGUID() == guid)
         return;

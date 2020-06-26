@@ -1162,6 +1162,14 @@ RecruitAFriend.MaxDifference = 4
 
 InstantLogout = 1
 
+#    PreventAFKLogout
+#        Description: Prevent players AFK from being logged out
+#        Default:     0  - (Disabled)
+#                     1  - (Enabled, prevent players AFK from being logged out in Sanctuary zones)
+#                     2  - (Enabled, prevent players AFK from being logged out in all zones)
+
+PreventAFKLogout = 0
+
 #
 #    DisableWaterBreath
 #        Description: Required security level for water breathing.
@@ -1437,15 +1445,15 @@ Motd = "Welcome to an AzerothCore server."
 #    PLEASE NOTE: another (hardcoded) text will appear below the MOTD:
 #
 #        "This server runs on AzerothCore www.azerothcore.org"
-#    
+#
 #    All the AzerothCore contributors, as well as its father projects (MaNGOS, TrinityCore, etc..),
 #    have worked for free to provide you this software. Please do not remove the credits.
 #
-#    Changing or removing such hardcoded text is considered a violation of our license 
+#    Changing or removing such hardcoded text is considered a violation of our license
 #    and it's not allowed. We reserve the right to take legal action in case of violations.
 #    Furthermore, any kind of support will be always denied.
 #
-#    All AzerothCore contributors and its father projects are publicly listed in 
+#    All AzerothCore contributors and its father projects are publicly listed in
 #    our official repository. Credits to open source contributions should always be shown.
 #
 
@@ -3261,6 +3269,29 @@ LFG.Location.All = 0
 #                     1 - (Enable)
 
 Armory.Enable = 1
+
+#    ICC Buff
+#       Description: Specify ICC buff
+#                    (It is necessary to restart the server after changing the values!)
+#       Default:     ICC.Buff.Horde    = 73822
+#                    ICC.Buff.Alliance = 73828
+#
+#                    Spell IDs for the auras:
+#                    73816 -  5% buff Horde
+#                    73818 - 10% buff Horde
+#                    73819 - 15% buff Horde
+#                    73820 - 20% buff Horde
+#                    73821 - 25% buff Horde
+#                    73822 - 30% buff Horde
+#                    73762 -  5% buff Alliance
+#                    73824 - 10% buff Alliance
+#                    73825 - 15% buff Alliance
+#                    73826 - 20% buff Alliance
+#                    73827 - 25% buff Alliance
+#                    73828 - 30% buff Alliance
+
+ICC.Buff.Horde    = 73822
+ICC.Buff.Alliance = 73828
 
 #
 ###################################################################################################

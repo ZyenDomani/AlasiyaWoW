@@ -242,6 +242,9 @@ struct LastPhaseIceTombTargetSelector : public std::unary_function<Unit*, bool>
             if (target->GetTypeId() != TYPEID_PLAYER)
                 return false;
 
+            if (target->HasAura(SPELL_FROST_IMBUED_BLADE))
+                return false;
+
             if (target->IsImmunedToDamageOrSchool(SPELL_SCHOOL_MASK_ALL) || target->HasAura(SPELL_ICE_TOMB_UNTARGETABLE) || target->HasAura(SPELL_ICE_TOMB_DAMAGE) || target->HasAura(SPELL_TANK_MARKER_AURA) || target->HasAuraType(SPELL_AURA_SPIRIT_OF_REDEMPTION))
                 return false;
 
@@ -638,7 +641,7 @@ class boss_sindragosa : public CreatureScript
                             if (ok)
                                 break;
                         } while (--triesLeft);
-                                
+
                         me->CastSpell(destX, destY, destZ, SPELL_FROST_BOMB_TRIGGER, false);
                         if (_bombCount >= 4)
                             events.ScheduleEvent(EVENT_LAND, 5500);
@@ -1154,12 +1157,12 @@ class SindragosaIceTombCheck
     public:
         bool operator()(Unit* unit) const
         {
-            return unit->IsImmunedToDamageOrSchool(SPELL_SCHOOL_MASK_ALL);
+            return unit->HasAura(SPELL_FROST_IMBUED_BLADE) || unit->IsImmunedToDamageOrSchool(SPELL_SCHOOL_MASK_ALL);
         }
 
         bool operator()(WorldObject* object) const
         {
-            return object->ToUnit() && object->ToUnit()->IsImmunedToDamageOrSchool(SPELL_SCHOOL_MASK_ALL);
+            return unit->HasAura(SPELL_FROST_IMBUED_BLADE) || unit->IsImmunedToDamageOrSchool(SPELL_SCHOOL_MASK_ALL);
         }
 };
 
@@ -1276,7 +1279,7 @@ class MysticBuffetTargetFilter
         explicit MysticBuffetTargetFilter(Unit* caster) : _caster(caster) { }
 
         bool operator()(WorldObject* unit) const
-        {    
+        {
             if (!unit->IsInMap(_caster))
                 return true;
 

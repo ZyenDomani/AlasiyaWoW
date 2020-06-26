@@ -168,7 +168,6 @@ enum Spells
 
 enum MiscData
 {
-    ITEM_GOBLIN_ROCKET_PACK = 49278,
     MUSIC_ENCOUNTER         = 17289
 };
 
@@ -194,7 +193,7 @@ Position const OrgrimsHammerTeleportExit = { 7.461699f, 0.158853f, 35.72989f, 0.
 // Alliance encounter
 Position const OrgrimsHammerTeleportPortal = { 47.550990f, -0.101778f, 37.61111f, 0.0f };
 Position const SkybreakerTeleportExit      = { -17.55738f, -0.090421f, 21.18366f, 0.0f };
-  
+
 uint32 const MuradinExitPathSize = 10;
 Position const MuradinExitPath[MuradinExitPathSize] =
 {
@@ -646,13 +645,6 @@ class npc_gunship : public CreatureScript
                                         c->DespawnOrUnsummon(1);
                                 }
                             }
-                            
-                    // Destory Goblin Rocket Pack
-                    Map::PlayerList const &PlayerList = me->GetMap()->GetPlayers();
-                    if (!PlayerList.isEmpty())
-                        for (Map::PlayerList::const_iterator itr = PlayerList.begin(); itr != PlayerList.end(); ++itr)
-                            if (Player* pPlr = itr->GetSource())
-                                pPlr->DestroyItemCount(49278, 1, true);
                 }
                 else
                 {
@@ -1009,7 +1001,7 @@ class npc_high_overlord_saurfang_igb : public CreatureScript
 
                 if (!me->GetVictim() || me->HasUnitState(UNIT_STATE_CASTING))
                     return;
-                
+
                 if (me->IsWithinMeleeRange(me->GetVictim()))
                     DoMeleeAttackIfReady();
                 else if (me->isAttackReady())
@@ -1348,7 +1340,7 @@ class npc_muradin_bronzebeard_igb : public CreatureScript
 
                 if (!me->GetVictim() || me->HasUnitState(UNIT_STATE_CASTING))
                     return;
-                
+
                 if (me->IsWithinMeleeRange(me->GetVictim()))
                     DoMeleeAttackIfReady();
                 else if (me->isAttackReady())

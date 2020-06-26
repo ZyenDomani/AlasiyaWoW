@@ -15,6 +15,7 @@
 #include "SFMT.h"
 #include "Errors.h" // for ASSERT
 #include <ace/TSS_T.h>
+#include <arpa/inet.h>
 
 typedef ACE_TSS<SFMTRand> SFMTRandTSS;
 static SFMTRandTSS sfmtRand;
