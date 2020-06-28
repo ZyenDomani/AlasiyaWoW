@@ -86,7 +86,7 @@ float playerBaseMoveSpeed[MAX_MOVE_TYPE] =
     3.14f                  // MOVE_PITCH_RATE
 };
 
-// Used for prepare can/can`t triggr aura
+// Used for prepare can/can`t trigger aura
 static bool InitTriggerAuraData();
 // Define can trigger auras
 static bool isTriggerAura[TOTAL_AURAS];
@@ -16378,7 +16378,12 @@ void Unit::Kill(Unit* killer, Unit* victim, bool durabilityLoss, WeaponAttackTyp
             creature->SetLootRecipient(NULL);
     }
 
-    // pussywizard: remade this if section (player is on the same map
+    // Allan: add kill to character webpage profile
+    if (player)
+        if (player->GetTypeId() == TYPEID_PLAYER)  //if (IS_PLAYER_GUID(player->GetGUID()))
+            player->AddKill(player->GetGUIDLow());
+
+    // pussywizard: remade this if section (player is on the same map)
     if (isRewardAllowed && creature)
     {
         Player* lr = creature->GetLootRecipient();
@@ -16553,6 +16558,10 @@ void Unit::Kill(Unit* killer, Unit* victim, bool durabilityLoss, WeaponAttackTyp
     // clean InHateListOf
     if (Player* plrVictim = victim->ToPlayer())
     {
+        // Allan: add player death to count for webpage data
+        if (plrVictim->GetTypeId() == TYPEID_PLAYER) //if (IS_PLAYER_GUID(plrVictim->GetGUID()))
+            plrVictim->AddDeath(victim->GetGUIDLow());
+
         // remember victim PvP death for corpse type and corpse reclaim delay
         // at original death (not at SpiritOfRedemtionTalent timeout)
         plrVictim->SetPvPDeath(player != NULL);
