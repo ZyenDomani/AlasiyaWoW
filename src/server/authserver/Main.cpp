@@ -73,6 +73,15 @@ void usage(const char* prog)
 /// Launch the auth server
 extern int main(int argc, char** argv)
 {
+/*
+    std::string cfg_def_file = _TRINITY_REALM_CONFIG;
+    cfg_def_file += ".dist";
+
+    if (!sConfigMgr->LoadInitial(cfg_def_file.c_str())) {
+        printf("ERROR: Invalid or missing default configuration file : %s\n", cfg_def_file.c_str());
+        return 1;
+    }*/
+
     // Command line parsing to get the configuration file name
     char const* configFile = _TRINITY_REALM_CONFIG;
     int count = 1;
@@ -91,19 +100,12 @@ extern int main(int argc, char** argv)
         }
         ++count;
     }
-
-    std::string cfg_def_file = _TRINITY_REALM_CONFIG;
-    cfg_def_file += ".dist";
-
-    if (!sConfigMgr->LoadInitial(cfg_def_file.c_str())) {
-        printf("ERROR: Invalid or missing default configuration file : %s\n", cfg_def_file.c_str());
-        return 1;
-    }
-
-    if (!sConfigMgr->LoadMore(configFile))
+    
+    if (!sConfigMgr->LoadInitial(configFile))
     {
         printf("WARNING: Invalid or missing configuration file : %s\n", configFile);
         printf("Verify that the file exists and has \'[authserver]\' written in the top of the file!\n");
+        return 1;
     }
 
     sLog->outString("%s (authserver)", GitRevision::GetFullVersion());

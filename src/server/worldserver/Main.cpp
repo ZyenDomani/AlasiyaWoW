@@ -40,6 +40,15 @@ void usage(const char* prog)
 /// Launch the Trinity server
 extern int main(int argc, char** argv)
 {
+    /*
+    std::string cfg_def_file=_TRINITY_CORE_CONFIG;
+    cfg_def_file += ".dist";
+
+    if (!sConfigMgr->LoadInitial(cfg_def_file.c_str())) {
+        printf("ERROR: Invalid or missing default configuration file : %s\n", cfg_def_file.c_str());
+        return 1;
+    }*/
+
     ///- Command line parsing to get the configuration file name
     char const* cfg_file = _TRINITY_CORE_CONFIG;
     int c = 1;
@@ -65,20 +74,11 @@ extern int main(int argc, char** argv)
         ++c;
     }
 
-    if (!sConfigMgr->LoadInitial(cfg_file))
-    {
+    if (!sConfigMgr->LoadInitial(cfg_file)) {
         printf("WARNING: Invalid or missing configuration file : %s\n", cfg_file);
-        printf("Loading default config file.");
-        //printf("Verify that the file exists and has \'[worldserver]' written in the top of the file!\n");
-        std::string cfg_def_file = "/dist/";
-        cfg_def_file += _TRINITY_CORE_CONFIG;
-        cfg_def_file += ".dist";
-
-        if (!sConfigMgr->LoadMore(cfg_def_file.c_str())) {
-            printf("ERROR: Invalid or missing default configuration file : %s\n", cfg_def_file.c_str());
-            return 1;
-        }
-        cfg_file = cfg_def_file.c_str();
+        printf("Verify that the file exists and has \'[worldserver]' written in the top of the file!\n");
+        //cfg_file = cfg_def_file.c_str();
+        return 1;
     }
 
     sLog->outString("Using configuration file %s.", cfg_file);

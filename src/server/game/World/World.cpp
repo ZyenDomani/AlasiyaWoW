@@ -417,6 +417,9 @@ void World::LoadModuleConfigSettings()
         std::string conf_path = _CONF_DIR;
         std::string cfg_file = conf_path + "/" + configFile;
 
+    #if PLATFORM == PLATFORM_WINDOWS
+        cfg_file = configFile;
+    #endif
         // Load .conf config
         if (!sConfigMgr->LoadMore(cfg_file.c_str()))
         {
@@ -426,18 +429,21 @@ void World::LoadModuleConfigSettings()
             sLog->outError("Module config: Loading default settings.");
             sLog->outString();
 
-            // Load .conf.dist config
             std::string cfg_def_file = conf_path + "/dist/" + configFile + ".dist";
 
+            // Load .conf.dist config
             if (!sConfigMgr->LoadMore(cfg_def_file.c_str()))
             {
-                //sLog->outString();
-                sLog->outError("Module config: Invalid or missing configuration dist file : %s", cfg_def_file.c_str());
-                //sLog->outError("Module config: Verify that the file exists and has \'[worldserver]' written in the top of the file!");
-                //sLog->outError("Module config: Use default settings!");
                 sLog->outString();
-            }
-        }
+                sLog->outError("Module config: Invalid or missing configuration dist file : %s", cfg_def_file.c_str());
+                sLog->outError("Module config: Verify that the file exists and has \'[worldserver]' written in the top of the file!");
+                sLog->outError("Module config: Use default settings!");
+                sLog->outString();
+            } else
+                printf("Module Config: Module %s using configuration file %s.\n", (*i), cfg_def_file.c_str());
+
+        } else
+            printf("Module Config: Module %s using configuration file %s.\n", (*i), cfg_file.c_str());
     }
 }
 
@@ -971,7 +977,7 @@ void World::LoadConfigSettings(bool reload)
         m_timers[WUPDATE_CLEANDB].SetInterval(m_int_configs[CONFIG_LOGDB_CLEARINTERVAL] * MINUTE * IN_MILLISECONDS);
         m_timers[WUPDATE_CLEANDB].Reset();
     }
-    m_int_configs[CONFIG_LOGDB_CLEARTIME] = sConfigMgr->GetIntDefault("LogDB.Opt.ClearTime", 1209600); // 14 days default
+    m_int_configs[CONFIG_LOGDB_CLEARTIME] = sConfigMgr->GetIntDefault("LogDB.Opt.ClearTime", 0); // default: no clearing of logs
     sLog->outString("Will clear `logs` table of entries older than %i seconds every %u minutes.",
         m_int_configs[CONFIG_LOGDB_CLEARTIME], m_int_configs[CONFIG_LOGDB_CLEARINTERVAL]);
 
