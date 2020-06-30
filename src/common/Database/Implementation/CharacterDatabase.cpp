@@ -570,6 +570,6 @@ void CharacterDatabaseConnection::DoPrepareStatements()
     PrepareStatement(CHAR_UPD_QUEST_TRACK_ABANDON_TIME, "UPDATE quest_tracker SET quest_abandon_time = NOW() WHERE id = ? AND character_guid = ? ORDER BY quest_accept_time DESC LIMIT 1", CONNECTION_ASYNC);
 
     // Webpage Character Stats
-    PrepareStatement(CHAR_INS_DEATH, "UPDATE characters SET deaths = deaths +1 WHERE guid = ?", CONNECTION_SYNCH);
-    PrepareStatement(CHAR_INS_KILL, "UPDATE characters SET kills = kills +1 WHERE guid = ?", CONNECTION_SYNCH);
+    //PrepareStatement(CHAR_INS_DEATH, "UPDATE characters SET deaths = deaths +1 WHERE guid = ?", CONNECTION_SYNCH);
+    //PrepareStatement(CHAR_INS_KILL, "UPDATE characters SET kills = kills +1 WHERE guid = ?", CONNECTION_SYNCH);
 }

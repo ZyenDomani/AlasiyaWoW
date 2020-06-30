@@ -3169,11 +3169,11 @@ void Player::AddKill(uint32 guid) {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     sLog->outDebug(LOG_FILTER_PLAYER, "Player: AddKill() called for GUID %u", guid);
 #endif
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_KILL);
-    stmt->setUInt32(0, guid);
+    //* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_KILL);
+    //stmt->setUInt32(0, guid);
     SQLTransaction trans = CharacterDatabase.BeginTransaction();
-    trans->Append(stmt);
-    //trans->PAppend("UPDATE `characters` SET kills = kills +1 WHERE guid = '%u'", guid);
+    //->Append(stmt);
+    trans->PAppend("UPDATE `characters` SET kills = kills +1 WHERE guid = '%u'", guid);
     CharacterDatabase.CommitTransaction(trans);
 }
 
@@ -3182,11 +3182,11 @@ void Player::AddDeath(uint32 guid) {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     sLog->outDebug(LOG_FILTER_PLAYER, "Player: AddDeath() called for GUID %u", guid);
 #endif
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_DEATH);
-    stmt->setUInt32(0, guid);
+    //PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_DEATH);
+    //stmt->setUInt32(0, guid);
     SQLTransaction trans = CharacterDatabase.BeginTransaction();
-    trans->Append(stmt);
-    //trans->PAppend("UPDATE `characters` SET deaths = deaths +1 WHERE guid = '%u'", guid);
+    //trans->Append(stmt);
+    trans->PAppend("UPDATE `characters` SET deaths = deaths +1 WHERE guid = '%u'", guid);
     CharacterDatabase.CommitTransaction(trans);
 }
 

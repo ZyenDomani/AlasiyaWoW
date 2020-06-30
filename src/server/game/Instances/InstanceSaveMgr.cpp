@@ -522,6 +522,8 @@ void InstanceSaveManager::_ResetOrWarnAll(uint32 mapid, Difficulty difficulty, b
             period = DAY;
 
         uint32 next_reset = uint32(((resetTime + MINUTE) / DAY * DAY) + period + diff);
+        while (time_t(next_reset - 3600) < now) // while next reset in past, skip to next reset time
+            next_reset = uint32(((next_reset + MINUTE) / DAY * DAY) + period + diff);
         SetResetTimeFor(mapid, difficulty, next_reset);
         SetExtendedResetTimeFor(mapid, difficulty, next_reset + period);
         ScheduleReset(time_t(next_reset-3600), InstResetEvent(1, mapid, difficulty));
@@ -707,7 +709,7 @@ InstancePlayerBind* InstanceSaveManager::PlayerGetBoundInstance(uint32 guidLow, 
 }
 
 bool InstanceSaveManager::PlayerIsPermBoundToInstance(uint32 guidLow, uint32 mapid, Difficulty difficulty)
-{ 
+{
     if (InstancePlayerBind* bind = PlayerGetBoundInstance(guidLow, mapid, difficulty))
         if (bind->perm)
             return true;

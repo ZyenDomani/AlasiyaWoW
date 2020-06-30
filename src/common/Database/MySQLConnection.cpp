@@ -68,8 +68,7 @@ void MySQLConnection::Close()
 
 bool MySQLConnection::Open()
 {
-    MYSQL *mysqlInit;
-    mysqlInit = mysql_init(NULL);
+    MYSQL *mysqlInit = mysql_init(NULL);
     if (!mysqlInit)
     {
         sLog->outError("Could not initialize Mysql connection to database `%s`", m_connectionInfo.database.c_str());
