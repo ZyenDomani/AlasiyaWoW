@@ -1203,7 +1203,7 @@ void WorldSession::HandlePlayerLoginFromDB(LoginQueryHolder* holder)
 
     sScriptMgr->OnPlayerLogin(pCurrChar);
 
-    // Announce Player Login   - allan
+    // Allan: Announce Player Login
     std::string teamColor = "";
     std::string classColor = "";
     std::string pClass = "";
@@ -1230,13 +1230,14 @@ void WorldSession::HandlePlayerLoginFromDB(LoginQueryHolder* holder)
 
     std::ostringstream ss;
     ss << MSG_COLOR_PURPLE << "SERVER:|r ";
+    // at one time, i had this where level color was based on player receiving this msg, like quest lvl colors
     ss << teamColor << "[" << CUSTOM_LIGHTRED << pLevel << ":";
     ss << classColor << pCurrChar->GetName() << teamColor << "]|r";
     ss << " has arrived.";  // @todo add location?
     sWorld->SendServerMessage(SERVER_MSG_STRING, ss.str().c_str());
 
     // misc login data sent to player on login.
-    // taken from Kargatum-system and modified for Alasiya by allan
+    // taken from Kargatum-system and modified for Alasiya
     const char* playerName = pCurrChar->GetName().c_str();
     ChatHandler handler(pCurrChar->GetSession());
     handler.PSendSysMessage("|cff00ff00Welcome back,|r %s", playerName);

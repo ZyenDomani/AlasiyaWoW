@@ -386,7 +386,7 @@ TeamId Battleground::GetPrematureWinner()
 inline void Battleground::_ProcessProgress(uint32 diff)
 {
     // *********************************************************
-    // ***           BATTLEGROUND BALLANCE SYSTEM            ***
+    // ***           BATTLEGROUND BALANCE SYSTEM            ***
     // *********************************************************
     // if less then minimum players are in on one side, then start premature finish timer
     if (!m_PrematureCountDown)
@@ -815,7 +815,7 @@ void Battleground::EndBattleground(TeamId winnerTeamId)
                 SetArenaTeamRatingChangeForTeam(winnerTeamId, winnerChange);
                 SetArenaTeamRatingChangeForTeam(GetOtherTeamId(winnerTeamId), loserChange);
 
-                // armory - allan
+                // Allan:  my armory
                 /** World of Warcraft Armory **/
                 if (sWorld->getBoolConfig(CONFIG_ARMORY_ENABLE))
                 {

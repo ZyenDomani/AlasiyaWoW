@@ -3062,7 +3062,7 @@ enum ChatLinkColors
     CHAT_LINK_COLOR_GLYPH       = 0xff66bbff
 };
 
-// Chat msg colors - allan
+// Allan: Chat msg colors
 #define     MSG_COLOR_ORANGE         "|cffFFA500"
 #define     MSG_COLOR_DARKORANGE     "|cffFF8C00"
 #define     MSG_COLOR_RED            "|cffFF0000"

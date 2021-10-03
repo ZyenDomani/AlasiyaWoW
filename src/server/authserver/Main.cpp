@@ -100,7 +100,7 @@ extern int main(int argc, char** argv)
         }
         ++count;
     }
-    
+
     if (!sConfigMgr->LoadInitial(configFile))
     {
         printf("WARNING: Invalid or missing configuration file : %s\n", configFile);
@@ -130,11 +130,11 @@ extern int main(int argc, char** argv)
 
     sLog->outDetail("%s (Library: %s)", OPENSSL_VERSION_TEXT, SSLeay_version(SSLEAY_VERSION));
 
-#if defined (ACE_HAS_EVENT_POLL) || defined (ACE_HAS_DEV_POLL)
-    ACE_Reactor::instance(new ACE_Reactor(new ACE_Dev_Poll_Reactor(ACE::max_handles(), 1), 1), true);
-#else
+//#if defined (ACE_HAS_EVENT_POLL) || defined (ACE_HAS_DEV_POLL)
+//    ACE_Reactor::instance(new ACE_Reactor(new ACE_Dev_Poll_Reactor(ACE::max_handles(), 1), 1), true);
+//#else
     ACE_Reactor::instance(new ACE_Reactor(new ACE_TP_Reactor(), true), true);
-#endif
+//#endif
 
     sLog->outBasic("Max allowed open files is %d", ACE::max_handles());
 

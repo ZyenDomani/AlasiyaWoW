@@ -2161,8 +2161,9 @@ void AchievementMgr::CompletedAchievement(AchievementEntry const* achievement)
     sLog->outDetail("AchievementMgr::CompletedAchievement(%u)", achievement->ID);
 #endif
 
+    // Allan: for my armory
     if (sWorld->getBoolConfig(CONFIG_ARMORY_ENABLE))
-        GetPlayer()->CreateWowarmoryFeed(1, achievement->ID, 0, 0);  // armory - allan
+        GetPlayer()->CreateWowarmoryFeed(1, achievement->ID, 0, 0);
 
     SendAchievementEarned(achievement);
     CompletedAchievementData& ca = m_completedAchievements[achievement->ID];
@@ -2172,6 +2173,7 @@ void AchievementMgr::CompletedAchievement(AchievementEntry const* achievement)
     sScriptMgr->OnAchievementComplete(GetPlayer(), achievement);
 
     // pussywizard: set all progress counters to 0, so progress will be deleted from db during save
+    //  is this something we want to keep?  - allan
     {
         bool allRefsCompleted = true;
         uint32 achiCheckId = achievement->refAchievement ? achievement->refAchievement : achievement->ID;
