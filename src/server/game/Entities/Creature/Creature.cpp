@@ -1668,7 +1668,7 @@ void Creature::Respawn(bool force)
 
     // xinef: relocate notifier, fixes npc appearing in corpse position after forced respawn (instead of spawn)
     m_last_notify_position.Relocate(-5000.0f, -5000.0f, -5000.0f, 0.0f);
-    UpdateObjectVisibility(true);   // error fix for 'invis' creatures damaging players  -allan
+    UpdateObjectVisibility(false);   // error fix for 'invis' creatures damaging players  -allan
 }
 
 void Creature::ForcedDespawn(uint32 timeMSToDespawn)

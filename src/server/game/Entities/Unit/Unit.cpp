@@ -17717,8 +17717,9 @@ void Unit::SetPhaseMask(uint32 newPhaseMask, bool update)
 void Unit::UpdateObjectVisibility(bool forced, bool /*fromUpdate*/)
 {
     if (!forced)
+    {
         AddToNotify(NOTIFY_VISIBILITY_CHANGED);
-    else
+    } else
     {
         WorldObject::UpdateObjectVisibility(true);
 
