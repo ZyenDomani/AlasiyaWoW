@@ -2104,10 +2104,6 @@ void World::Update(uint32 diff)
     {
         m_timers[WUPDATE_5_SECS].Reset();
 
-        // moved here from HandleCharEnumOpcode
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_EXPIRED_BANS);
-        CharacterDatabase.Execute(stmt);
-
         // copy players hashmapholder to avoid mutex
         WhoListCacheMgr::Update();
     }
@@ -2116,8 +2112,13 @@ void World::Update(uint32 diff)
     _UpdateGameTime();
 
     /// Handle daily quests reset time
-    if (m_gameTime > m_NextDailyQuestReset)
+    if (m_gameTime > m_NextDailyQuestReset) {
         ResetDailyQuests();
+
+        // moved here from 5 sec update...way too often.
+        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_EXPIRED_BANS);
+        CharacterDatabase.Execute(stmt);
+    }
 
     /// Handle weekly quests reset time
     if (m_gameTime > m_NextWeeklyQuestReset)
