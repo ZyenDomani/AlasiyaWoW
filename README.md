@@ -1,13 +1,12 @@
 # ![logo](https://raw.githubusercontent.com/azerothcore/azerothcore.github.io/master/images/logo-github.png) AzerothCore
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e61f4ea81de14b289fbf83d2b0da0c35)]
-[![Master Build Status](https://app.travis-ci.com/ZyenDomani/AlasiyaWoW.svg?branch=Alasiya)]
-[![Coverity Scan]
+<a href="https://app.travis-ci.com/ZyenDomani/AlasiyaWoW.svg?branch=Alasiya"></a>
+
 <a href="https://scan.coverity.com/projects/zyendomani-alasiyawow">
   <img alt="Coverity Scan Build Status"
        src="https://scan.coverity.com/projects/27416/badge.svg"/>
 </a>
-[![CodeFactor]<a href="https://www.codefactor.io/repository/github/zyendomani/alasiyawow"><img src="https://www.codefactor.io/repository/github/zyendomani/alasiyawow/badge" alt="CodeFactor" /></a>
+<a href="https://www.codefactor.io/repository/github/zyendomani/alasiyawow"><img src="https://www.codefactor.io/repository/github/zyendomani/alasiyawow/badge" alt="CodeFactor" /></a>
 
 
 ## Introduction
