@@ -1,4 +1,4 @@
-# ![logo](https://raw.githubusercontent.com/azerothcore/azerothcore.github.io/master/images/logo-github.png) AzerothCore
+# ![logo](https://raw.githubusercontent.com/azerothcore/azerothcore.github.io/master/images/logo-github.png) AzerothCore - Alasiya WoW
 
 <a href="https://app.travis-ci.com/ZyenDomani/AlasiyaWoW.svg?branch=Alasiya"></a>
 
