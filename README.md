@@ -7,7 +7,7 @@
        src="https://scan.coverity.com/projects/27416/badge.svg"/>
 </a>
 <a href="https://www.codefactor.io/repository/github/zyendomani/alasiyawow"><img src="https://www.codefactor.io/repository/github/zyendomani/alasiyawow/badge" alt="CodeFactor" /></a>
-
+<a href="https://www.codacy.com/gh/ZyenDomani/AlasiyaWoW/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ZyenDomani/AlasiyaWoW&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/36be90dee7e844c1b42290cae9ee960e"/></a>
 
 ## Introduction
 
