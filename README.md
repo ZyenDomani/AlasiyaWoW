@@ -65,4 +65,5 @@ This project is brought to you thanks to:
 
 List of organizations that help the AzerothCore project:
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/6d812fc99e1e483591725594719d2691)](https://app.codacy.com/gh/ZyenDomani/AlasiyaWoW?utm_source=github.com&utm_medium=referral&utm_content=ZyenDomani/AlasiyaWoW&utm_campaign=Badge_Grade_Settings)
 [![JetBrains](https://user-images.githubusercontent.com/75517/51205146-7f225c80-1905-11e9-82e0-835627be170d.png)](https://www.jetbrains.com/?from=AzerothCore)
