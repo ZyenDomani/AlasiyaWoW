@@ -15,7 +15,9 @@ AzerothCore is an open source game-server application for World of Warcraft, cur
 
 It is written in C++ and based on MaNGOS, TrinityCore and SunwellCore.
 
-:moneybag: You can support the project by financing the resolution of issues [using Bountysource](http://www.azerothcore.org/wiki/Bountysource).
+This is the Alasiya Branch, which is based on older code to build/run on my servers.  Updates are hand-picked from upstream for compatibility with my servers.
+
+
 
 ## Why AzerothCore?
 
@@ -56,7 +58,7 @@ This project is brought to you thanks to:
 
 ## Links
 
-- [Website](https://azerothcore.github.io/)
+- [Website](http://wow.alasiya.net/)
 
 
 ## Sponsors
