@@ -15,7 +15,9 @@ AzerothCore is an open source game-server application for World of Warcraft, cur
 
 It is written in C++ and based on MaNGOS, TrinityCore and SunwellCore.
 
-This is the Alasiya Branch, which is based on older code to build/run on my servers.  Updates are hand-picked from upstream for compatibility with my servers.
+This is the Alasiya Branch, which is based on older code to build/run on my servers.
+Updates are hand-picked from upstream for compatibility with my servers.
+Very Minor changes and additions based on my personal preference for my server and site.
 
 
 
@@ -34,13 +36,9 @@ If you want to contribute, in [our wiki](http://www.azerothcore.org/wiki) you fi
 
 ## Instructions & Support
 
-Installation instructions are available [here](http://www.azerothcore.org/wiki/Installation).
+Basic Installation instructions are available [here](http://www.azerothcore.org/wiki/Installation).
 
-For help requests, it is recommended to ask your question on [StackOverflow](https://stackoverflow.com/questions/tagged/azerothcore) and link it in [our chat](https://discordapp.com/channels/217589275766685707/284406375495368704).
-
-## Docker
-
-Dockerization of AzerothCore is fully supported. More details about Docker and the setup instructions are available [here](http://www.azerothcore.org/wiki/Install-with-Docker).
+I do not offer support for this branch.
 
 ## Authors & Contributors
 
@@ -58,11 +56,5 @@ This project is brought to you thanks to:
 
 ## Links
 
-- [Website](http://wow.alasiya.net/)
+- The Alasiya.Net WoW 3.3.5 site: [Website](http://wow.alasiya.net/)
 
-
-## Sponsors
-
-List of organizations that help the AzerothCore project:
-
-[![JetBrains](https://user-images.githubusercontent.com/75517/51205146-7f225c80-1905-11e9-82e0-835627be170d.png)](https://www.jetbrains.com/?from=AzerothCore)
