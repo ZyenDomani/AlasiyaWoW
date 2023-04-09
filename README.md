@@ -56,5 +56,5 @@ This project is brought to you thanks to:
 
 ## Links
 
-- The Alasiya.Net WoW 3.3.5 site: [Website](http://wow.alasiya.net/)
+- [The Alasiya.Net WoW 3.3.5 website](http://wow.alasiya.net/)
 
