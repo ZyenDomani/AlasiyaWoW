@@ -1,15 +1,13 @@
-# ![logo](https://raw.githubusercontent.com/azerothcore/azerothcore.github.io/master/images/logo-github.png) AzerothCore
+# ![logo](https://raw.githubusercontent.com/azerothcore/azerothcore.github.io/master/images/logo-github.png) AzerothCore - Alasiya WoW
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e61f4ea81de14b289fbf83d2b0da0c35)](https://app.codacy.com/app/FrancescoBorzi/azerothcore-wotlk?utm_source=github.com&utm_medium=referral&utm_content=azerothcore/azerothcore-wotlk&utm_campaign=Badge_Grade_Settings)
-[![Master Build Status](https://travis-ci.org/azerothcore/azerothcore-wotlk.svg)](https://travis-ci.org/azerothcore/azerothcore-wotlk)
-<a href="https://scan.coverity.com/projects/azerothcore-azerothcore-wotlk">
+<a href="https://app.travis-ci.com/ZyenDomani/AlasiyaWoW.svg?branch=Alasiya"></a>
+
+<a href="https://scan.coverity.com/projects/zyendomani-alasiyawow">
   <img alt="Coverity Scan Build Status"
-       src="https://scan.coverity.com/projects/13814/badge.svg"/>
+       src="https://scan.coverity.com/projects/27416/badge.svg"/>
 </a>
-[![Bountysource](https://www.bountysource.com/badge/tracker?tracker_id=40032087)](https://www.bountysource.com/teams/azerothcore/bounties)
-[![StackOverflow](http://img.shields.io/badge/stackoverflow-azerothcore-blue.svg)]( https://stackoverflow.com/questions/tagged/azerothcore?sort=newest)
-[![Discord](https://img.shields.io/discord/217589275766685707.svg)](https://discord.gg/gXNKCG5)
-
+<a href="https://www.codefactor.io/repository/github/zyendomani/alasiyawow"><img src="https://www.codefactor.io/repository/github/zyendomani/alasiyawow/badge" alt="CodeFactor" /></a>
+<a href="https://www.codacy.com/gh/ZyenDomani/AlasiyaWoW/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ZyenDomani/AlasiyaWoW&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/36be90dee7e844c1b42290cae9ee960e"/></a>
 
 ## Introduction
 
@@ -17,7 +15,9 @@ AzerothCore is an open source game-server application for World of Warcraft, cur
 
 It is written in C++ and based on MaNGOS, TrinityCore and SunwellCore.
 
-:moneybag: You can support the project by financing the resolution of issues [using Bountysource](http://www.azerothcore.org/wiki/Bountysource).
+This is the Alasiya Branch, which is based on older code to build/run on my servers.  Updates are hand-picked from upstream for compatibility with my servers.
+
+
 
 ## Why AzerothCore?
 
@@ -58,7 +58,7 @@ This project is brought to you thanks to:
 
 ## Links
 
-- [Website](https://azerothcore.github.io/)
+- [Website](http://wow.alasiya.net/)
 
 
 ## Sponsors
