@@ -2083,7 +2083,9 @@ void World::Update(uint32 diff)
         m_updateTimeSum += diff;
         if (m_updateTimeSum > m_int_configs[CONFIG_INTERVAL_LOG_UPDATE])
         {
+        #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
             sLog->outBasic("Average update time diff: %u. Players online: %u.", avgDiffTracker.getAverage(), GetActiveSessionCount());
+        #endif
             m_updateTimeSum = 0;
         }
     }

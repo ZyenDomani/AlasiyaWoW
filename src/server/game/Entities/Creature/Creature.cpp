@@ -516,9 +516,9 @@ void Creature::Update(uint32 diff)
 
                 uint64 dbtableHighGuid = MAKE_NEW_GUID(m_DBTableGuid, GetEntry(), HIGHGUID_UNIT);
                 time_t linkedRespawntime = GetMap()->GetLinkedRespawnTime(dbtableHighGuid);
-                if (!linkedRespawntime)             // Can respawn
+                if (!linkedRespawntime) {            // Can respawn
                     Respawn();
-                else                                // the master is dead
+                } else                                // the master is dead
                 {
                     uint64 targetGuid = sObjectMgr->GetLinkedRespawnGuid(dbtableHighGuid);
                     if (targetGuid == dbtableHighGuid) // if linking self, never respawn (check delayed to next day)
@@ -663,6 +663,7 @@ void Creature::Regenerate(Powers power)
         {
             // For hunter pets.
             addvalue = 24 * sWorld->getRate(RATE_POWER_FOCUS);
+
             break;
         }
         case POWER_ENERGY:
@@ -1668,7 +1669,7 @@ void Creature::Respawn(bool force)
 
     // xinef: relocate notifier, fixes npc appearing in corpse position after forced respawn (instead of spawn)
     m_last_notify_position.Relocate(-5000.0f, -5000.0f, -5000.0f, 0.0f);
-    UpdateObjectVisibility(false);   // error fix for 'invis' creatures damaging players  -allan
+    UpdateObjectVisibility(false);
 }
 
 void Creature::ForcedDespawn(uint32 timeMSToDespawn)

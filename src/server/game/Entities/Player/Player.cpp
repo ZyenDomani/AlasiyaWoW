@@ -3097,9 +3097,9 @@ bool Player::IsGroupVisibleFor(Player const* p) const
 {
     switch (sWorld->getIntConfig(CONFIG_GROUP_VISIBILITY))
     {
-        default: return IsInSameGroupWith(p);
         case 1:  return IsInSameRaidWith(p);
         case 2:  return GetTeamId() == p->GetTeamId();
+        default: return IsInSameGroupWith(p);
     }
 }
 
@@ -3167,7 +3167,7 @@ void Player::SendLogXPGain(uint32 GivenXP, Unit* victim, uint32 BonusXP, bool re
 void Player::AddKill(uint32 guid) {
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_PLAYER, "Player: AddKill() called for GUID %u", guid);
+    sLog->outDebug(LOG_FILTER_UNITS, "Player: AddKill() called for GUID %u", guid);
 #endif
     //* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_KILL);
     //stmt->setUInt32(0, guid);
@@ -3180,7 +3180,7 @@ void Player::AddKill(uint32 guid) {
 void Player::AddDeath(uint32 guid) {
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_PLAYER, "Player: AddDeath() called for GUID %u", guid);
+    sLog->outDebug(LOG_FILTER_UNITS, "Player: AddDeath() called for GUID %u", guid);
 #endif
     //PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_DEATH);
     //stmt->setUInt32(0, guid);
@@ -3204,8 +3204,6 @@ void Player::GiveXP(uint32 xp, Unit* victim, float group_rate)
     if (victim && victim->GetTypeId() == TYPEID_UNIT && !victim->ToCreature()->hasLootRecipient())
         return;
 
-    uint8 level = getLevel();
-
     sScriptMgr->OnGivePlayerXP(this, xp, victim);
 
     // Favored experience increase START
@@ -3216,6 +3214,8 @@ void Player::GiveXP(uint32 xp, Unit* victim, float group_rate)
 
     xp = uint32(xp * (1 + favored_exp_mult));
     // Favored experience increase END
+
+    uint8 level = getLevel();
 
     // XP to money conversion processed in Player::RewardQuest
     if (level >= sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL))

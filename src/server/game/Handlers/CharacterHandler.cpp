@@ -1231,6 +1231,7 @@ void WorldSession::HandlePlayerLoginFromDB(LoginQueryHolder* holder)
     std::ostringstream ss;
     ss << MSG_COLOR_PURPLE << "SERVER:|r ";
     // at one time, i had this where level color was based on player receiving this msg, like quest lvl colors
+    //  - dont remember how i did it...
     ss << teamColor << "[" << CUSTOM_LIGHTRED << pLevel << ":";
     ss << classColor << pCurrChar->GetName() << teamColor << "]|r";
     ss << " has arrived.";  // @todo add location?
@@ -2723,7 +2724,9 @@ void WorldSession::HandleCharFactionOrRaceChange(WorldPacket& recvData)
     }
 
     std::string IP_str = GetRemoteAddress();
-    //sLog->outDebug(LOG_FILTER_PLAYER, "%s (IP: %s) changed race from %u to %u", GetPlayerInfo().c_str(), IP_str.c_str(), oldRace, race);
+#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
+    sLog->outDebug(LOG_FILTER_UNITS, "%s (IP: %s) changed race from %u to %u", GetPlayerInfo().c_str(), IP_str.c_str(), oldRace, race);
+#endif
 
     WorldPacket data(SMSG_CHAR_FACTION_CHANGE, 1 + 8 + (newname.size() + 1) + 1 + 1 + 1 + 1 + 1 + 1 + 1);
     data << uint8(RESPONSE_SUCCESS);

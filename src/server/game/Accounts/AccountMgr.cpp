@@ -291,22 +291,22 @@ namespace AccountMgr
 
     bool IsGMAccount(uint32 gmlevel)
     {
-        return gmlevel >= SEC_GAMEMASTER && gmlevel <= SEC_CONSOLE;
-    }
-
-    bool IsDevAccount(uint32 gmlevel)
-    {
-        return gmlevel == SEC_DEVELOPER;
+        return gmlevel > SEC_MODERATOR && gmlevel <= SEC_CONSOLE;
     }
 
     bool IsSupervisorAccount(uint32 gmlevel)
     {
-        return gmlevel == SEC_SUPERVISOR;
+        return gmlevel == SEC_SUPERVISOR && gmlevel <= SEC_CONSOLE;
     }
 
     bool IsAdminAccount(uint32 gmlevel)
     {
-        return gmlevel >= SEC_ADMINISTRATOR && gmlevel <= SEC_CONSOLE;
+        return gmlevel > SEC_SUPERVISOR && gmlevel <= SEC_CONSOLE;
+    }
+
+    bool IsDevAccount(uint32 gmlevel)
+    {
+        return gmlevel == SEC_DEVELOPER && gmlevel <= SEC_CONSOLE;
     }
 
     bool IsOwnerAccount(uint32 gmlevel)
